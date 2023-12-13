@@ -17,7 +17,7 @@ rpc_url = config('rpc_url')
 logger.debug("Imports done!")
 
 
-# rpc_connection = AuthServiceProxy(f"http://{rpc_username}:{rpc_password}@{rpc_url}:{rpc_port}", timeout=120)
+rpc_connection = AuthServiceProxy(f"http://{rpc_username}:{rpc_password}@{rpc_url}:{rpc_port}", timeout=120)
 # best_block_hash = rpc_connection.getbestblockhash()
 # print(rpc_connection.getblock(best_block_hash))
 # print(rpc_connection.getinfo())
@@ -25,5 +25,26 @@ logger.debug("Imports done!")
 # block_count = rpc_connection.getblockcount()
 # print(f'Current block count: {block_count}')
 
-bn = rpc.get_block_count()
-logger.debug(bn)
+#Get Block Count
+block_count = rpc.get_block_count()
+logger.debug(block_count)
+assert isinstance(block_count, int)
+
+#Get Block Hash from Block Number
+block_hash = rpc.get_block_hash(block_count)
+logger.debug(block_hash)
+
+#Get Block from Hash
+# block = rpc.get_block(block_hash)
+# logger.debug(block)
+# assert isinstance(block_count, int)
+
+#Get balance of address
+amount = rpc.get_received_by_address("38XnPvu9PmonFU9WouPXUjYbW91wa5MerL")
+logger.debug(amount)
+
+#random address
+#38XnPvu9PmonFU9WouPXUjYbW91wa5MerL
+#1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+
+# print(rpc_connection.getblockchaininfo())
