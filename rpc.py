@@ -2,9 +2,13 @@ from decouple import config
 from bitcoinrpc.authproxy import AuthServiceProxy, JSONRPCException
 from loguru import logger
 
+#Blockchain
 import rpc_files.get_block
 import rpc_files.get_block_count
 import rpc_files.get_block_hash
+
+#Wallet
+import rpc_files.get_received_by_address
 
 #Import all environment variables for RPC:
 rpc_username = config('rpc_username')
@@ -108,13 +112,22 @@ def get_block_hash(block_number):
 # encryptwallet
 # getaddressesbylabel
 # getaddressinfo
+
 # getbalance
+
 # getbalances
+
 # getnewaddress
 # getrawchangeaddress
+
 # getreceivedbyaddress
+def get_received_by_address(address):
+    return rpc_files.get_received_by_address.main(rpc_connection, address)
+
 # getreceivedbylabel
+
 # gettransaction
+
 # getunconfirmedbalance
 # getwalletinfo
 # importaddress
