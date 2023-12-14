@@ -31,12 +31,45 @@ logger.debug(block_count)
 assert isinstance(block_count, int)
 
 #Get Block Hash from Block Number
-block_hash = rpc.get_block_hash(0)
-logger.debug(block_hash)
+# block_hash = rpc.get_block_hash(0)
+# logger.debug(block_hash)
 
 #Get Block from Hash
-block = rpc.get_block(block_hash)
-logger.debug(block)
+for i in range(100000, 100001):
+    block_hash = rpc.get_block_hash(i)
+    logger.debug(block_hash)
+    block = rpc.get_block(block_hash)
+    logger.debug(block)
+    for key in block.keys():
+        logger.debug(f"{key}: {block[key]}")
+    for txhash in block['tx']:
+        logger.debug(f"Current hash: {txhash}")
+        raw_transaction = rpc.get_raw_transaction(txhash)
+        logger.debug(f"Raw: {raw_transaction}")
+        decoded_transaction = rpc.decode_raw_transaction(raw_transaction)
+        logger.debug(f"Decoded: {decoded_transaction}")
+        for key in decoded_transaction:
+            if key == "vin":
+                sender_address = rpc.get_sender_address(decoded_transaction['txid'])
+                logger.debug(f"Sender address: {sender_address}")
+
+            elif key == "vout":
+                # logger.debug(f"{key}: {decoded_transaction[key]}")
+                logger.debug(f"{key}:")
+
+                for item in decoded_transaction[key]:
+                    try:
+                        logger.debug(f"{item}")
+                        logger.debug(f"{item['value']} to {item['scriptPubKey']['address']}")
+                    except KeyError:
+                        logger.debug(f"Item: {item}")
+            # elif key == "vout":
+            else:
+                logger.debug(f"{key}: {decoded_transaction[key]}")
+
+        input("stopped after tx")
+
+    # input(f"Stopped after {i}")
 # assert isinstance(block_count, int)
 
 #create wallet

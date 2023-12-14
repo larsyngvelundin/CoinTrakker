@@ -7,9 +7,16 @@ import rpc_files.get_block
 import rpc_files.get_block_count
 import rpc_files.get_block_hash
 
+#Rawtransactions RPCs
+import rpc_files.decode_raw_transaction
+import rpc_files.get_raw_transaction
+
 #Wallet
 import rpc_files.create_wallet
 import rpc_files.get_received_by_address
+
+#Custom
+import rpc_files.get_sender_address
 
 #Import all environment variables for RPC:
 rpc_username = config('rpc_username')
@@ -90,11 +97,19 @@ def get_block_hash(block_number):
 # createpsbt
 # createrawtransaction
 # decodepsbt
+
 # decoderawtransaction
+def decode_raw_transaction(raw_transaction):
+    return rpc_files.decode_raw_transaction.main(rpc_connection, raw_transaction)
+
 # decodescript
 # finalizepsbt
 # fundrawtransaction
+
 # getrawtransaction
+def get_raw_transaction(tx_hash):
+    return rpc_files.get_raw_transaction.main(rpc_connection, tx_hash)
+
 # joinpsbts
 # sendrawtransaction
 # signrawtransactionwithkey
@@ -150,7 +165,9 @@ def get_received_by_address(address):
 # listreceivedbylabel
 # listsinceblock
 # listtransactions
+
 # listunspent
+
 # listwalletdir
 # listwallets
 # loadwallet
@@ -178,3 +195,9 @@ def get_received_by_address(address):
 ####################
 ##Custom functions##
 ####################
+
+# getbalanceaddress
+
+# getsenderaddress
+def get_sender_address(transaction_hash):
+    return rpc_files.get_sender_address.main(rpc_connection, transaction_hash)
