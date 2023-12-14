@@ -31,17 +31,22 @@ logger.debug(block_count)
 assert isinstance(block_count, int)
 
 #Get Block Hash from Block Number
-block_hash = rpc.get_block_hash(block_count)
+block_hash = rpc.get_block_hash(0)
 logger.debug(block_hash)
 
 #Get Block from Hash
-# block = rpc.get_block(block_hash)
-# logger.debug(block)
+block = rpc.get_block(block_hash)
+logger.debug(block)
 # assert isinstance(block_count, int)
 
+#create wallet
+# wallet = rpc.create_wallet("wallet")
+# logger.debug(wallet)
+
+
 #Get balance of address
-amount = rpc.get_received_by_address("38XnPvu9PmonFU9WouPXUjYbW91wa5MerL")
-logger.debug(amount)
+# amount = rpc.get_received_by_address("38XnPvu9PmonFU9WouPXUjYbW91wa5MerL")
+# logger.debug(amount)
 
 #random address
 #38XnPvu9PmonFU9WouPXUjYbW91wa5MerL
