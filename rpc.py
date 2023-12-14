@@ -8,6 +8,7 @@ import rpc_files.get_block_count
 import rpc_files.get_block_hash
 
 #Wallet
+import rpc_files.create_wallet
 import rpc_files.get_received_by_address
 
 #Import all environment variables for RPC:
@@ -106,7 +107,11 @@ def get_block_hash(block_number):
 # addmultisigaddress
 # backupwallet
 # bumpfee
+
 # createwallet
+def create_wallet(name):
+    return rpc_files.create_wallet.main(rpc_connection, name)
+
 # dumpprivkey
 # dumpwallet
 # encryptwallet
