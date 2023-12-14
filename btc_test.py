@@ -51,6 +51,7 @@ for i in range(100000, 100001):
         # logger.debug(f"{key}: {block[key]}")
         pass
     for txhash in block['tx']:
+        logger.info(f"Checking new transaction hash\n{txhash}")
         # logger.debug(f"Current hash: {txhash}")
         raw_transaction = rpc.get_raw_transaction(txhash)
         # logger.debug(f"Raw: {raw_transaction}")
@@ -85,8 +86,8 @@ for i in range(100000, 100001):
             else:
                 logger.debug(f"{key}: {decoded_transaction[key]}")
                 pass
-
-        input("stopped after tx")
+        
+        # input("stopped after tx")
 
     # input(f"Stopped after {i}")
 # assert isinstance(block_count, int)
