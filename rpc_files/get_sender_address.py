@@ -14,3 +14,4 @@ def main(con, transaction_hash):
         logger.debug(f"Decoded prev: \n{prev_tx_decoded}")
         sender_addresses = prev_tx_decoded['vout'][vout_index]['scriptPubKey']['address']
         logger.debug(f"Sender addresses: {sender_addresses}")
+        return sender_addresses
