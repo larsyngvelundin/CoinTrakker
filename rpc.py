@@ -18,7 +18,9 @@ import rpc_files.create_wallet
 import rpc_files.get_received_by_address
 
 #Custom
+import rpc_files.get_recipient_addresses
 import rpc_files.get_sender_address
+import rpc_files.parse_transaction_data
 
 #Import all environment variables for RPC:
 rpc_username = config('rpc_username')
@@ -190,10 +192,6 @@ def get_received_by_address(address):
 #def get_reward_recipient(transaction_hash):
 
 
-# getsenderaddress
-def get_sender_address(transaction_hash):
-    return rpc_files.get_sender_address.main(rpc_connection, transaction_hash)
-
 # getaddressfrompubkey
 def get_address_from_pubkey(pubkey_hex):
     pubkey_bytes = bytes.fromhex(pubkey_hex)
@@ -204,3 +202,15 @@ def get_address_from_pubkey(pubkey_hex):
     address_bytes = extended + checksum
     address = base58.b58encode(address_bytes)
     return address.decode()
+
+# getrecipientaddresses
+def get_recipient_addresses(transaction_hash):
+    return rpc_files.get_recipient_addresses.main(rpc_connection, transaction_hash)
+
+# getsenderaddress
+def get_sender_address(transaction_hash):
+    return rpc_files.get_sender_address.main(rpc_connection, transaction_hash)
+
+#parsetransactiondata
+def parse_transaction_data(transaction_hash):
+    return rpc_files.parse_transaction_data.main(transaction_hash)
