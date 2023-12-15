@@ -23,5 +23,5 @@ def create_db(address):
 #get_transactions_to(from, from_block, to_block)
 
 # savetransaction
-def save_transaction(amount, to_address, from_address, block):
-    return db_files.save_transaction.main()
+def save_transaction(amount, to_address, from_address, block, transaction_hash):
+    return db_files.save_transaction.main(amount, to_address, from_address, block, transaction_hash)
