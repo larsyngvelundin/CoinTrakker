@@ -52,41 +52,23 @@ def get_block_hash(block_number):
     return rpc_files.get_block_hash.main(rpc_connection, block_number)
 
 # getblockheader
-
 # getblockstats
-
 # getchaintips
-
 # getchaintxstats
-
 # getdifficulty
-
 # getmempoolancestors
-
 # getmempooldescendants
-
 # getmempoolentry
-
 # getmempoolinfo
-
 # getrawmempool
-
 # gettxout
-
 # gettxoutproof
-
 # gettxoutsetinfo
-
 # preciousblock
-
 # pruneblockchain
-
 # savemempool
-
 # scantxoutset
-
 # verifychain
-
 # verifytxoutproof
 
 ##Rawtransactions RPCs
@@ -201,6 +183,9 @@ def get_received_by_address(address):
 #   if(block == "latest"):
 #       
 #   return db.check_balance(address, block=block)
+
+# getrewardrecipient
+#def get_reward_recipient(transaction_hash):
 
 
 # getsenderaddress
