@@ -2,6 +2,11 @@ import db_files.create_db
 import db_files.db_exists
 import db_files.save_transaction
 
+#have db for addresses
+#each address is only used once, and given a unique auto incrementing integer
+#there's a .db for address_lookup.
+#there's a .db for wallet balances at latest checked block
+
 #Ensure that db folders exists and create them if not
 
 #check_balance(address, block=latest)
