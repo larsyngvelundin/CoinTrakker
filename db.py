@@ -8,6 +8,13 @@ import sqlite3
     #check if file exists in local_deb/outgoing
         #subtract amount from sum up until block
 
+#createdb
+#def create_db(address):
+#   con = sqlite3.connect("local_db/outgoing/{address}.db")
+#   create table transactions(amount to block)
+#   con = sqlite3.connect("local_db/incoming/{address}.db")
+#   create table transactions(amount from block)
+
 #get_transactions_from(from, from_block, to_block)
 
 #get_transactions_to(from, from_block, to_block)
