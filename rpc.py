@@ -1,5 +1,7 @@
-from decouple import config
+import base58
 from bitcoinrpc.authproxy import AuthServiceProxy, JSONRPCException
+from decouple import config
+import hashlib
 from loguru import logger
 
 #Blockchain
@@ -35,8 +37,8 @@ rpc_connection = AuthServiceProxy(f"http://{rpc_username}:{rpc_password}@{rpc_ur
 # getbestblockhash
 
 # getblock
-def get_block(block_hash):
-    return rpc_files.get_block.main(rpc_connection, block_hash)
+def get_block(block_hash, verbosity=1):
+    return rpc_files.get_block.main(rpc_connection, block_hash, verbosity=verbosity)
     # pass
 
 # getblockchaininfo
@@ -191,3 +193,14 @@ def get_received_by_address(address):
 # getsenderaddress
 def get_sender_address(transaction_hash):
     return rpc_files.get_sender_address.main(rpc_connection, transaction_hash)
+
+# getaddressfrompubkey
+def get_address_from_pubkey(pubkey_hex):
+    pubkey_bytes = bytes.fromhex(pubkey_hex)
+    sha256 = hashlib.sha256(pubkey_bytes).digest()
+    ripemd160 = hashlib.new('ripemd160', sha256).digest()
+    extended = b'\x00' + ripemd160 
+    checksum = hashlib.sha256(hashlib.sha256(extended).digest()).digest()[:4]
+    address_bytes = extended + checksum
+    address = base58.b58encode(address_bytes)
+    return address.decode()
