@@ -197,6 +197,11 @@ def get_received_by_address(address):
 ####################
 
 # getbalanceaddress
+#def get_balance_address(address, block="latest"):
+#   if(block == "latest"):
+#       
+#   return db.check_balance(address, block=block)
+
 
 # getsenderaddress
 def get_sender_address(transaction_hash):
