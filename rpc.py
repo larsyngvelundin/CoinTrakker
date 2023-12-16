@@ -1,5 +1,7 @@
-from decouple import config
+import base58
 from bitcoinrpc.authproxy import AuthServiceProxy, JSONRPCException
+from decouple import config
+import hashlib
 from loguru import logger
 
 #Blockchain
@@ -16,7 +18,9 @@ import rpc_files.create_wallet
 import rpc_files.get_received_by_address
 
 #Custom
+import rpc_files.get_recipient_addresses
 import rpc_files.get_sender_address
+import rpc_files.parse_transaction_data
 
 #Import all environment variables for RPC:
 rpc_username = config('rpc_username')
@@ -35,8 +39,8 @@ rpc_connection = AuthServiceProxy(f"http://{rpc_username}:{rpc_password}@{rpc_ur
 # getbestblockhash
 
 # getblock
-def get_block(block_hash):
-    return rpc_files.get_block.main(rpc_connection, block_hash)
+def get_block(block_hash, verbosity=1):
+    return rpc_files.get_block.main(rpc_connection, block_hash, verbosity=verbosity)
     # pass
 
 # getblockchaininfo
@@ -52,41 +56,23 @@ def get_block_hash(block_number):
     return rpc_files.get_block_hash.main(rpc_connection, block_number)
 
 # getblockheader
-
 # getblockstats
-
 # getchaintips
-
 # getchaintxstats
-
 # getdifficulty
-
 # getmempoolancestors
-
 # getmempooldescendants
-
 # getmempoolentry
-
 # getmempoolinfo
-
 # getrawmempool
-
 # gettxout
-
 # gettxoutproof
-
 # gettxoutsetinfo
-
 # preciousblock
-
 # pruneblockchain
-
 # savemempool
-
 # scantxoutset
-
 # verifychain
-
 # verifytxoutproof
 
 ##Rawtransactions RPCs
@@ -197,7 +183,34 @@ def get_received_by_address(address):
 ####################
 
 # getbalanceaddress
+#def get_balance_address(address, block="latest"):
+#   if(block == "latest"):
+#       
+#   return db.check_balance(address, block=block)
+
+# getrewardrecipient
+#def get_reward_recipient(transaction_hash):
+
+
+# getaddressfrompubkey
+def get_address_from_pubkey(pubkey_hex):
+    pubkey_bytes = bytes.fromhex(pubkey_hex)
+    sha256 = hashlib.sha256(pubkey_bytes).digest()
+    ripemd160 = hashlib.new('ripemd160', sha256).digest()
+    extended = b'\x00' + ripemd160 
+    checksum = hashlib.sha256(hashlib.sha256(extended).digest()).digest()[:4]
+    address_bytes = extended + checksum
+    address = base58.b58encode(address_bytes)
+    return address.decode()
+
+# getrecipientaddresses
+def get_recipient_addresses(transaction_hash):
+    return rpc_files.get_recipient_addresses.main(rpc_connection, transaction_hash)
 
 # getsenderaddress
 def get_sender_address(transaction_hash):
     return rpc_files.get_sender_address.main(rpc_connection, transaction_hash)
+
+#parsetransactiondata
+def parse_transaction_data(transaction_hash):
+    return rpc_files.parse_transaction_data.main(transaction_hash)
