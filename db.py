@@ -1,3 +1,5 @@
+from loguru import logger
+
 import db_files.check_balance
 import db_files.create_db
 import db_files.db_exists
