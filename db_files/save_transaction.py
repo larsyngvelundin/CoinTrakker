@@ -1,5 +1,4 @@
 import sqlite3
-import sqlite3.IntegrityError as IntegrityError
 from loguru import logger
 
 import db
@@ -29,7 +28,7 @@ def main(amount, to_address, from_address, block, transaction_hash):
         with con:
             con.executemany(sql, data)
         logger.info(f"Added {transaction_hash} to outgoing/{from_address}.db")
-    except IntegrityError as error_msg:
+    except Exception as error_msg:
         logger.error(error_msg)
         logger.info("already saved this transaction")
     #Save incoming for recipient
@@ -40,7 +39,7 @@ def main(amount, to_address, from_address, block, transaction_hash):
         with con:
             con.executemany(sql, data)
         logger.info(f"Added {transaction_hash} to incoming/{to_address}.db")
-    except IntegrityError as error_msg:
+    except Exception as error_msg:
         logger.error(error_msg)
         logger.info("already saved this transaction")
 
