@@ -23,7 +23,7 @@ def main(amount, to_address, from_address, block, transaction_hash):
     #Save outgoing for sender
     con = sqlite3.connect(f"local_db/outgoing/{from_address}.db")
     sql =  f'INSERT INTO transactions (amount, to_address, block, transaction_hash) values(?,?,?,?)'
-    data = [(amount, to_address_id, block, transaction_hash_id)]
+    data = [(int(amount), str(to_address_id), int(block), str(transaction_hash_id))]
     with con:
         con.executemany(sql, data)
     logger.info(f"Added {transaction_hash} to outgoing/{from_address}.db")
