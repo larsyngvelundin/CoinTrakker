@@ -9,7 +9,7 @@ test = rpc.parse_transaction_data(tx)
 block = 821747
 
 for recipient in test['to']:
-    db.save_transaction(test['to'][recipient], recipient, test['from'], block, >
+    db.save_transaction(test['to'][recipient], recipient, test['from'], block, tx)
     bal = db.check_balance(recipient)
 
 print(f"Full transaction:\n{test}")
