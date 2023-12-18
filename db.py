@@ -19,7 +19,10 @@ import rpc
 #Ensure that db folders exists and create them if not
 
 #check_balance(address, block=latest)
-def check_balance(address, block=rpc.get_block_count()):
+def check_balance(address, block = 0):
+    if (not block):
+        logger.info("Setting to_block to latest")
+        block = rpc.get_block_count()
     return db_files.check_balance.main(address, block=block)
 
 #createdb
@@ -35,11 +38,17 @@ def initialize():
     db_files.initialize.main()
 
 #get_transactions_from(from, from_block, to_block)
-def get_transactions_from(address, from_block=0, to_block=rpc.get_block_count()):
+def get_transactions_from(address, from_block=0, to_block=0):
+    if (not to_block):
+        logger.info("Setting to_block to latest")
+        block = rpc.get_block_count()
     return db_files.get_transactions_from.main(address, from_block=from_block, to_block=to_block)
 
 #get_transactions_to(from, from_block, to_block)
-def get_transactions_to(address, from_block=0, to_block=rpc.get_block_count()):
+def get_transactions_to(address, from_block=0, to_block=0):
+    if (not to_block):
+        logger.info("Setting to_block to latest")
+        block = rpc.get_block_count()
     return db_files.get_transactions_to.main(address, from_block=from_block, to_block=to_block)
 
 #printall
