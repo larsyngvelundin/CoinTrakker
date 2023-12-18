@@ -8,6 +8,10 @@ def main(amount, to_address, from_address, block, transaction_hash):
         logger.info(f"DB for {to_address} does not exist")
         db.create_db(to_address)
         logger.info(f"Created DB files")
+    if(not db.db_exists(from_address)):
+        logger.info(f"DB for {from_address} does not exist")
+        db.create_db(from_address)
+        logger.info(f"Created DB files")
 
     #Save/get the address IDs
     from_address_id = db.save_address(from_address) 
