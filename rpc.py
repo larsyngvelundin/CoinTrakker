@@ -20,6 +20,7 @@ import rpc_files.get_received_by_address
 #Custom
 import rpc_files.get_recipient_addresses
 import rpc_files.get_sender_address
+import rpc_files.parse_blocks
 import rpc_files.parse_transaction_data
 
 #Import all environment variables for RPC:
@@ -210,6 +211,10 @@ def get_recipient_addresses(transaction_hash):
 # getsenderaddress
 def get_sender_address(transaction_hash):
     return rpc_files.get_sender_address.main(rpc_connection, transaction_hash)
+
+#parseblocks
+def parse_blocks(from_block, to_block):
+    rpc_files.parse_blocks.main(from_block, to_block)
 
 #parsetransactiondata
 def parse_transaction_data(transaction_hash):
