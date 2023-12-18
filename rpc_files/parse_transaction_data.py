@@ -12,6 +12,7 @@ def main(transaction_hash):
     sender = rpc.get_sender_address(transaction_hash)
     parsed['from'] = sender
     total_amount = 0
+    parsed['to'] = {}
     for item in decoded_transaction['vout']:
         try:
             logger.debug(f"{item}")
