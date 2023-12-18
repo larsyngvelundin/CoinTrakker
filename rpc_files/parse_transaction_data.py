@@ -7,22 +7,34 @@ def main(transaction_hash):
     raw_transaction = rpc.get_raw_transaction(transaction_hash)
     decoded_transaction = rpc.decode_raw_transaction(raw_transaction)
     logger.debug(f"Decoded: {decoded_transaction}")
+    parsed = {}
+    parsed['transaction_hash'] = transaction_hash
     sender = rpc.get_sender_address(transaction_hash)
+    parsed['from'] = sender
+    total_amount = 0
     for item in decoded_transaction['vout']:
         try:
             logger.debug(f"{item}")
-            logger.info(f"{item['value']} to {item['scriptPubKey']['address']}")
+            to_address = item['scriptPubKey']['address']
+            amount = item['value']
+            logger.info(f"{amount} to {to_address}")
+            parsed['to'][to_address] = amount
+            total_amount += amount
         except KeyError:
             logger.debug(f"Item: {item}")
             logger.debug("No plain address address found")
             try:
                 pubkey = item['scriptPubKey']['asm'].split(" ")[0]
-                recipient_address = rpc.get_address_from_pubkey(pubkey)
-                logger.info(f"{item['value']} rewarded to {recipient_address}")
+                to_address = rpc.get_address_from_pubkey(pubkey)
+                amount = item['value']
+                logger.info(f"{item['value']} rewarded to {to_address}")
+                parsed['to'][to_address] = amount
+                total_amount += amount
             except KeyError:
                 logger.error("Could not find any address for this transaction")
                 logger.info(f"Transaction vout:\n{decoded_transaction[key]}")
-
+    parsed['amount'] = total_amount
+    return parsed
 
     
 #dict?
