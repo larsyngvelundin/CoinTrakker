@@ -1,5 +1,6 @@
 from loguru import logger
 
+import convert
 import rpc
 
 def main(transaction_hash):
@@ -17,8 +18,9 @@ def main(transaction_hash):
         try:
             logger.debug(f"{item}")
             to_address = item['scriptPubKey']['address']
-            amount = item['value']
-            logger.info(f"{amount} to {to_address}")
+            amount = convert.to_sats(item['value'])
+            logger.debug(f"{amount}")
+            logger.info(f"{convert.to_btc(amount)} BTC to {to_address}")
             parsed['to'][to_address] = amount
             total_amount += amount
         except KeyError:
@@ -27,14 +29,16 @@ def main(transaction_hash):
             try:
                 pubkey = item['scriptPubKey']['asm'].split(" ")[0]
                 to_address = rpc.get_address_from_pubkey(pubkey)
-                amount = item['value']
-                logger.info(f"{item['value']} rewarded to {to_address}")
+                amount = convert.to_sats(item['value'])
+                logger.debug(f"{amount}")
+                logger.info(f"{convert.to_btc(amount)} BTC sent to {to_address}")
                 parsed['to'][to_address] = amount
                 total_amount += amount
             except KeyError:
                 logger.error("Could not find any address for this transaction")
                 logger.info(f"Transaction vout:\n{decoded_transaction['vout']}")
     parsed['amount'] = total_amount
+    logger.debug(parsed)
     return parsed
 
     
