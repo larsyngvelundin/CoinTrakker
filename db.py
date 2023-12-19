@@ -3,6 +3,10 @@ from loguru import logger
 import db_files.check_balance
 import db_files.create_db
 import db_files.db_exists
+import db_files.get_address_from_id
+import db_files.get_hash_from_id
+import db_files.get_id_from_address
+import db_files.get_id_from_hash
 import db_files.get_transactions_from
 import db_files.get_transactions_to
 import db_files.initialize
@@ -35,23 +39,39 @@ def create_db(address):
 def db_exists(address):
    return db_files.db_exists.main(address)
 
-#initialize
-def initialize():
-    db_files.initialize.main()
+#getaddressfromid
+def get_address_from_id(id):
+    return db_files.get_address_from_id.main(id)
+
+#gethashfromid
+def get_hash_from_id(id):
+    return db_files.get_hash_from_id.main(id)
+
+#getidfromaddress
+def get_id_from_address(id):
+    return db_files.get_id_from_address.main(id)
+
+#getidfromhash
+def get_id_from_hash(id):
+    return db_files.get_id_from_hash.main(id)
 
 #get_transactions_from(from, from_block, to_block)
 def get_transactions_from(address, from_block=0, to_block=0):
     if (not to_block):
         logger.info("Setting to_block to latest")
-        block = rpc.get_block_count()
+        to_block = rpc.get_block_count()
     return db_files.get_transactions_from.main(address, from_block=from_block, to_block=to_block)
 
 #get_transactions_to(from, from_block, to_block)
 def get_transactions_to(address, from_block=0, to_block=0):
     if (not to_block):
         logger.info("Setting to_block to latest")
-        block = rpc.get_block_count()
+        to_block = rpc.get_block_count()
     return db_files.get_transactions_to.main(address, from_block=from_block, to_block=to_block)
+
+#initialize
+def initialize():
+    db_files.initialize.main()
 
 #printall
 def print_all(db_file):
