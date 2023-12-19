@@ -7,7 +7,7 @@ def main(address):
     con.execute("""
         CREATE TABLE if not exists transactions(
             amount INTEGER,
-            to_address TEXT,
+            to_address INTEGER,
             block INTEGER,
             transaction_hash INTEGER,
             UID TEXT UNIQUE
@@ -17,7 +17,7 @@ def main(address):
     con.execute("""
         CREATE TABLE if not exists transactions(
             amount INTEGER,
-            from_address TEXT,
+            from_address INTEGER,
             block INTEGER,
             transaction_hash INTEGER,
             UID TEXT UNIQUE
