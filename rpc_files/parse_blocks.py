@@ -18,10 +18,11 @@ def main(from_block, to_block):
             for txhash in block['tx']:
                 logger.info(f"Checking new transaction hash\n{txhash}")
                 # logger.debug(f"Current hash: {txhash}")
-                raw_transaction = rpc.get_raw_transaction(txhash)
+                # raw_transaction = rpc.get_raw_transaction(txhash)
                 transaction_data = rpc.parse_transaction_data(txhash)
                 for recipient in transaction_data['to']:
                     db.save_transaction(transaction_data['to'][recipient], recipient, transaction_data['from'], i, txhash)
+                db.save_transaction(transaction_data['fee'], "Network Fee", transaction_data['from'], i, txhash)
           
         else: #if Genesis
             
