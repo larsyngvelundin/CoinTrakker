@@ -18,13 +18,15 @@ def main(con, transaction_hash):
         except KeyError as error_msg:
             logger.debug("No plain address address found")
             try:
+                logger.info(f"Current item:\n{item}")
                 pubkey = item['scriptPubKey']['asm'].split(" ")[0]
                 to_address = rpc.get_address_from_pubkey(pubkey)
                 amount = item['value']
                 logger.info(f"{item['value']} rewarded to {to_address}")
                 parsed['to'][to_address] = amount
                 total_amount += amount
-            except KeyError:
+            except KeyError as error_msg:
+                logger.error(error_msg)
                 logger.error("Could not find any address for this transaction")
-                logger.info(f"Transaction vout:\n{decoded_transaction[key]}")
+                # logger.info(f"Transaction vout:\n{decoded_transaction[key]}")
         return sender_address
