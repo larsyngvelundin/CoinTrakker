@@ -18,6 +18,7 @@ import rpc_files.create_wallet
 import rpc_files.get_received_by_address
 
 #Custom
+import rpc_files.get_fee
 import rpc_files.get_recipient_addresses
 import rpc_files.get_sender_address
 import rpc_files.parse_blocks
@@ -94,8 +95,8 @@ def decode_raw_transaction(raw_transaction):
 # fundrawtransaction
 
 # getrawtransaction
-def get_raw_transaction(tx_hash):
-    return rpc_files.get_raw_transaction.main(rpc_connection, tx_hash)
+def get_raw_transaction(tx_hash, detailed=False):
+    return rpc_files.get_raw_transaction.main(rpc_connection, tx_hash, detailed=detailed)
 
 # joinpsbts
 # sendrawtransaction
@@ -203,6 +204,10 @@ def get_address_from_pubkey(pubkey_hex):
     address_bytes = extended + checksum
     address = base58.b58encode(address_bytes)
     return address.decode()
+
+#getfee
+def get_fee(transaction_hash):
+    return rpc_files.get_fee.main(transaction_hash)
 
 # getrecipientaddresses
 def get_recipient_addresses(transaction_hash):
