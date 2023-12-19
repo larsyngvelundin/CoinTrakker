@@ -38,6 +38,7 @@ def main(transaction_hash):
                 logger.error("Could not find any address for this transaction")
                 logger.info(f"Transaction vout:\n{decoded_transaction['vout']}")
     parsed['amount'] = total_amount
+    parsed['fee'] = convert.to_sats(rpc.get_fee(transaction_hash))
     logger.debug(parsed)
     return parsed
 
