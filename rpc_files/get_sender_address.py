@@ -27,11 +27,11 @@ def main(con, transaction_hash):
                 logger.debug("Trying")
                 # amount = prev_tx_decoded['value']
                 logger.debug("Trying")
-                # logger.info(f"{prev_tx_decoded['value']} rewarded to {to_address}")
+                # logger.debug(f"{prev_tx_decoded['value']} rewarded to {to_address}")
                 # parsed['to'][to_address] = amount
                 # total_amount += amount
             except KeyError as error_msg:
                 logger.error("Could not find any address for this transaction")
                 logger.error(error_msg)
-                logger.info(f"Transaction vout:\n{decoded_transaction['vout']}")
+                logger.debug(f"Transaction vout:\n{decoded_transaction['vout']}")
         return sender_address

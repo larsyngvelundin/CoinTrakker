@@ -2,7 +2,7 @@ import sqlite3
 from loguru import logger
 
 def main(address):
-    logger.info("Creating db")
+    logger.debug("Creating db")
     con = sqlite3.connect(f"local_db/outgoing/{address}.db")
     con.execute("""
         CREATE TABLE if not exists transactions(

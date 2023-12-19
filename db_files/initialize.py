@@ -1,10 +1,9 @@
 from loguru import logger
 import os
-# import os.path
 import sqlite3
 
 def main():
-    logger.info("Test")
+    logger.debug("Test")
     #check if local_db folder exists
     if not os.path.isdir("local_db"):
         os.mkdir("local_db")

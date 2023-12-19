@@ -2,7 +2,7 @@ from loguru import logger
 import sqlite3
 
 def main(address):
-    logger.info("test")
+    logger.debug("test")
     con = sqlite3.connect("local_db/addresses.db")
     #Try to save the address
     try:
@@ -18,7 +18,7 @@ def main(address):
     #Get and return the address
     with con:
         data = con.execute(sql)
-        logger.info(f"sql data: {data}")
+        logger.debug(f"sql data: {data}")
     data = data.fetchone()[0]
     con.close()
     return data

@@ -1,3 +1,3 @@
 from loguru import logger
 def main():
-    logger.info("Trying to get recipient addresses")
+    logger.debug("Trying to get recipient addresses")
