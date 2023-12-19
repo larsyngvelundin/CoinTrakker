@@ -1,0 +1,16 @@
+1ExF15z6YxFrNZHcnH2sYohbKBh47b1aow
+-Mining reward at 2634
+05bb97ea447aacaf6e44c68ffa8dd11ef2bce6826eb99d567b9968c8b971b9eb 
+CORRECT
+
+at 2922
+-Sending 0.02 to 13UPd24YLT8n9obxESWxVskCFpJidWd459
+-Sending 49.98 to himself
+
+Balance should be 49.98
+
+At 222453
+b73dc70009a4d252305f043fc2f82531411f217355e3d28170820bbf79183a55
+1H1qKXp2MPg7Vw3uoooYtMws4qoXVb5nFR - 48.97000000
+1G8KWmq1Ggy67upopZz2iqrm3LQXewzFti - 1.00000000
+Fee 0.01 BTC
