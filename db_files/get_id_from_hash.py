@@ -2,7 +2,7 @@ from loguru import logger
 import sqlite3
 
 def main(transaction_hash):
-    logger.info("test")
+    logger.debug("test")
 
     con = sqlite3.connect(f"local_db/transaction_hashes.db")
     sql = f"SELECT id FROM transaction_hashes WHERE transaction_hash = '{transaction_hash}';"

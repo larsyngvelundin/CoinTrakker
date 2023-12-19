@@ -2,7 +2,7 @@ from loguru import logger
 import rpc
 
 def main(transaction_hash):
-    logger.info("Test")
+    logger.debug("Test")
     fee = 0
     try:
         raw_transaction = rpc.get_raw_transaction(transaction_hash)
@@ -15,5 +15,5 @@ def main(transaction_hash):
         output_value = sum([vout['value'] for vout in decoded_transaction['vout']])
         fee = input_value - output_value
     except KeyError:
-        logger.info("Probably no fee")
+        logger.debug("Probably no fee")
     return(fee)

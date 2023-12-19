@@ -5,13 +5,13 @@ import db
 
 def main(amount, to_address, from_address, block, transaction_hash):
     if(not db.db_exists(to_address)):
-        logger.info(f"DB for {to_address} does not exist")
+        logger.debug(f"DB for {to_address} does not exist")
         db.create_db(to_address)
-        logger.info(f"Created DB files")
+        logger.debug(f"Created DB files")
     if(not db.db_exists(from_address)):
-        logger.info(f"DB for {from_address} does not exist")
+        logger.debug(f"DB for {from_address} does not exist")
         db.create_db(from_address)
-        logger.info(f"Created DB files")
+        logger.debug(f"Created DB files")
 
     #Save/get the address IDs
     from_address_id = db.save_address(from_address) 
@@ -29,10 +29,10 @@ def main(amount, to_address, from_address, block, transaction_hash):
         data = [(int(amount), str(to_address_id), int(block), str(transaction_hash_id), UID)]
         with con:
             con.executemany(sql, data)
-        logger.info(f"Added {transaction_hash} to outgoing/{from_address}.db")
+        logger.debug(f"Added {transaction_hash} to outgoing/{from_address}.db")
     except Exception as error_msg:
         logger.error(error_msg)
-        logger.info("already saved this transaction")
+        logger.debug("already saved this transaction")
     #Save incoming for recipient
     try:
         con = sqlite3.connect(f"local_db/incoming/{to_address}.db")
@@ -40,8 +40,8 @@ def main(amount, to_address, from_address, block, transaction_hash):
         data = [(int(amount), str(to_address_id), int(block), str(transaction_hash_id), UID)]
         with con:
             con.executemany(sql, data)
-        logger.info(f"Added {transaction_hash} to incoming/{to_address}.db")
+        logger.debug(f"Added {transaction_hash} to incoming/{to_address}.db")
     except Exception as error_msg:
         logger.error(error_msg)
-        logger.info("already saved this transaction")
+        logger.debug("already saved this transaction")
 
