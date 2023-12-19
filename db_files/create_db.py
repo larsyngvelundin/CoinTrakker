@@ -9,7 +9,8 @@ def main(address):
             amount INTEGER,
             to_address TEXT,
             block INTEGER,
-            transaction_hash TEXT UNIQUE
+            transaction_hash INTEGER,
+            UID TEXT UNIQUE
         );
     """)
     con = sqlite3.connect(f"local_db/incoming/{address}.db")
@@ -18,6 +19,7 @@ def main(address):
             amount INTEGER,
             from_address TEXT,
             block INTEGER,
-            transaction_hash TEXT UNIQUE
+            transaction_hash INTEGER,
+            UID TEXT UNIQUE
         );
     """)
