@@ -33,7 +33,7 @@ def main(transaction_hash):
                 total_amount += amount
             except KeyError:
                 logger.error("Could not find any address for this transaction")
-                logger.info(f"Transaction vout:\n{decoded_transaction[key]}")
+                logger.info(f"Transaction vout:\n{decoded_transaction['vout']}")
     parsed['amount'] = total_amount
     return parsed
 
