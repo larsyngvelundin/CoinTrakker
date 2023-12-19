@@ -20,11 +20,13 @@ def main(amount, to_address, from_address, block, transaction_hash):
     #Save/get the transaction ID
     transaction_hash_id = db.save_hash(transaction_hash)
 
+    UID = f"{from_address_id}-{to_address_id}-{transaction_hash_id}"
+
     #Save outgoing for sender
     try:
         con = sqlite3.connect(f"local_db/outgoing/{from_address}.db")
-        sql =  f'INSERT INTO transactions (amount, to_address, block, transaction_hash) values(?,?,?,?)'
-        data = [(int(amount), str(to_address_id), int(block), str(transaction_hash_id))]
+        sql =  f'INSERT INTO transactions (amount, to_address, block, transaction_hash, UID) values(?,?,?,?,?)'
+        data = [(int(amount), str(to_address_id), int(block), str(transaction_hash_id), UID)]
         with con:
             con.executemany(sql, data)
         logger.info(f"Added {transaction_hash} to outgoing/{from_address}.db")
@@ -34,8 +36,8 @@ def main(amount, to_address, from_address, block, transaction_hash):
     #Save incoming for recipient
     try:
         con = sqlite3.connect(f"local_db/incoming/{to_address}.db")
-        sql =  f'INSERT INTO transactions (amount, from_address, block, transaction_hash) values(?,?,?,?)'
-        data = [(int(amount), str(to_address_id), int(block), str(transaction_hash_id))]
+        sql =  f'INSERT INTO transactions (amount, from_address, block, transaction_hash, UID) values(?, ?,?,?,?)'
+        data = [(int(amount), str(to_address_id), int(block), str(transaction_hash_id), UID)]
         with con:
             con.executemany(sql, data)
         logger.info(f"Added {transaction_hash} to incoming/{to_address}.db")
