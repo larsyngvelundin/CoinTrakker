@@ -10,6 +10,7 @@ def main(address, from_block=0, to_block=100):
         data = con.execute(sql)
     outgoing = data.fetchall()
     for transaction in outgoing:
+        logger.debug(transaction)
         balance -= transaction[0]
     # logger.info(balance)
     return balance
