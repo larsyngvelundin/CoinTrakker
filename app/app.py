@@ -1,4 +1,4 @@
-from flask import Flask, render_template, Response, request
+from flask import Flask, render_template, Response, request, jsonify
 import math
 import random
 
@@ -23,12 +23,11 @@ def fps():
     the_answer = random.randint(25, 60)
     return (str(the_answer))
 
+@app.route('/get_new')
+def get_new():
+    new_data = {'content':f"{str(random.randint(0,10))}"}
+    return jsonify(new_data)
+
 @app.route('/')
 def index():
-    """Video streaming home page."""
     return render_template('./index.html')
-
-if __name__ == '__main__':
-    app.run(debug=True, port=4567)
-else:
-    print(f"__name__ : {__name__}")
