@@ -1,8 +1,12 @@
 from loguru import logger
 import sqlite3
 
+import db
+
 def main(db_file):
     logger.debug("test")
+    if(isinstance(db_file, int)):
+        db_file = db.get_address_from_id(db_file)
     if(db_file.find("addresses") > -1 or db_file.find("hashes") > -1):
         logger.debug("Found addresses, or hashes")
         con = sqlite3.connect(f"local_db/{db_file}.db")

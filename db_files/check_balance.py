@@ -4,6 +4,8 @@ import sqlite3
 import db
 
 def main(address, block=100):
+    if(isinstance(address, int)):
+        address = db.get_address_from_id(address)
     if(not db.db_exists(address)):
         logger.debug(f"DB for {address} does not exist")
         db.create_db(address)
