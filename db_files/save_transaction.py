@@ -26,7 +26,7 @@ def main(amount, to_address, from_address, block, transaction_hash):
     try:
         con = sqlite3.connect(f"local_db/outgoing/{from_address}.db")
         sql =  f'INSERT INTO transactions (amount, to_address, block, transaction_hash, UID) values(?,?,?,?,?)'
-        data = [(int(amount), str(to_address_id), int(block), str(transaction_hash_id), UID)]
+        data = [(int(amount), int(to_address_id), int(block), int(transaction_hash_id), UID)]
         with con:
             con.executemany(sql, data)
         logger.debug(f"Added {transaction_hash} to outgoing/{from_address}.db")
@@ -37,7 +37,7 @@ def main(amount, to_address, from_address, block, transaction_hash):
     try:
         con = sqlite3.connect(f"local_db/incoming/{to_address}.db")
         sql =  f'INSERT INTO transactions (amount, from_address, block, transaction_hash, UID) values(?, ?,?,?,?)'
-        data = [(int(amount), str(to_address_id), int(block), str(transaction_hash_id), UID)]
+        data = [(int(amount), int(from_address_id), int(block), int(transaction_hash_id), UID)]
         with con:
             con.executemany(sql, data)
         logger.debug(f"Added {transaction_hash} to incoming/{to_address}.db")
