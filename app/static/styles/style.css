@@ -1,0 +1,18 @@
+body{
+    background-color:rgb(100, 100, 100);
+}
+
+.flex-cont{
+    background-color: rgb(60, 60, 60);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;  
+}
+
+.flex-cont span{
+    background-color: white;
+    text-align: center; 
+    box-sizing: border-box;
+    border: solid red 1px;
+    transition: width 2s;
+}

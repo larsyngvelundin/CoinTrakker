@@ -1,0 +1,30 @@
+<html>
+    <head>
+      <meta charset="UTF-8">
+      <script src="https://unpkg.com/htmx.org@1.6.1"></script>
+      <link rel="stylesheet" href="{{ url_for('static',filename='/styles/style.css') }}">
+      <script src="{{ url_for('static',filename='/scripts/main.js') }}" defer></script>
+      <!-- <link rel="stylesheet" href="app/styles/style.css"> -->
+    </head>
+
+
+
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8  offset-lg-2">
+                    <button onclick=myFunction()>Add via flask</button>
+                    <button id="addnumtest">Add via JS</button>
+                    <div class="flex-cont" id="testingdiv" hx-get="/get_test" hx-trigger="load, click"></div>
+                </div>
+            </div>
+        </div>
+        <script>
+            async function myFunction() {
+  const a = await fetch("/set_test")
+}   
+        console.log("in index")
+        </script>
+    </body>
+
+</html>
