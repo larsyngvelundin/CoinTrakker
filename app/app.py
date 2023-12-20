@@ -30,3 +30,5 @@ def index():
 
 if __name__ == '__main__':
     app.run(debug=True, port=4567)
+else:
+    print(f"__name__ : {__name__}")
