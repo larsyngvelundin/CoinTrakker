@@ -16,24 +16,29 @@ def main(transaction_hash):
     parsed['to'] = {}
     for item in decoded_transaction['vout']:
         try:
+            logger.debug("\n\nChecking new transaction")
             logger.debug(f"{item}")
             to_address = item['scriptPubKey']['address']
             amount = convert.to_sats(item['value'])
-            logger.debug(f"{amount}")
-            logger.debug(f"{convert.to_btc(amount)} BTC to {to_address}")
-            parsed['to'][to_address] = amount
-            total_amount += amount
+            logger.debug(f"Is the sender the recipient? {to_address != sender}")
+            if (to_address != sender):
+                logger.debug(f"{amount}")
+                logger.debug(f"{convert.to_btc(amount)} BTC to {to_address}")
+                parsed['to'][to_address] = amount
+                total_amount += amount
         except KeyError:
             logger.debug(f"Item: {item}")
             logger.debug("No plain address address found")
             try:
                 pubkey = item['scriptPubKey']['asm'].split(" ")[0]
                 to_address = rpc.get_address_from_pubkey(pubkey)
-                amount = convert.to_sats(item['value'])
-                logger.debug(f"{amount}")
-                logger.debug(f"{convert.to_btc(amount)} BTC sent to {to_address}")
-                parsed['to'][to_address] = amount
-                total_amount += amount
+                logger.debug(f"Is the sender the recipient? {to_address != sender}")
+                if (to_address != sender):
+                    amount = convert.to_sats(item['value'])
+                    logger.debug(f"{amount}")
+                    logger.debug(f"{convert.to_btc(amount)} BTC sent to {to_address}")
+                    parsed['to'][to_address] = amount
+                    total_amount += amount
             except KeyError:
                 logger.error("Could not find any address for this transaction")
                 logger.debug(f"Transaction vout:\n{decoded_transaction['vout']}")
