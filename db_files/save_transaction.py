@@ -31,7 +31,7 @@ def main(amount, to_address, from_address, block, transaction_hash):
             con.executemany(sql, data)
         logger.debug(f"Added {transaction_hash} to outgoing/{from_address}.db")
     except Exception as error_msg:
-        logger.error(error_msg)
+        logger.debug(error_msg)
         logger.debug("already saved this transaction")
     #Save incoming for recipient
     try:
@@ -42,6 +42,6 @@ def main(amount, to_address, from_address, block, transaction_hash):
             con.executemany(sql, data)
         logger.debug(f"Added {transaction_hash} to incoming/{to_address}.db")
     except Exception as error_msg:
-        logger.error(error_msg)
+        logger.debug(error_msg)
         logger.debug("already saved this transaction")
 

@@ -12,8 +12,8 @@ def main(address):
         cursor.execute(sql, (address,))
         con.commit()
     except Exception as error_msg:
-        logger.error(f"Could not save {address} (probably already saved)")
-        logger.error(error_msg)
+        logger.debug(f"Could not save {address} (probably already saved)")
+        logger.debug(error_msg)
     sql = f"SELECT id FROM addresses WHERE address='{address}';"
     #Get and return the address
     with con:
