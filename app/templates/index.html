@@ -8,14 +8,16 @@
     </head>
 
 
-
     <body>
         <div class="container">
             <div class="row">
                 <div class="col-lg-8  offset-lg-2">
                     <button onclick=myFunction()>Add via flask</button>
                     <button id="addnumtest">Add via JS</button>
-                    <div class="flex-cont" id="testingdiv" hx-get="/get_test" hx-trigger="load, click"></div>
+                    <button id="addnumtestmult">Add multiple via JS</button>
+                    <button id="addnumtestdyn">Add dynamic via JS</button>
+                    <!-- <div class="flex-cont" id="testingdiv" hx-get="/get_test" hx-trigger="load, click"></div> -->
+                    <div class="flex-cont" id="testingdiv"></div>
                 </div>
             </div>
         </div>

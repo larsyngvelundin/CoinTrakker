@@ -4,15 +4,25 @@ body{
 
 .flex-cont{
     background-color: rgb(60, 60, 60);
-    display: flex;
+    /* display: flex;
     justify-content: space-around;
-    align-items: center;  
+    align-items: center;   */
 }
 
 .flex-cont span{
+    display: block;
+    width: auto;
     background-color: white;
     text-align: center; 
     box-sizing: border-box;
     border: solid red 1px;
-    transition: width 2s;
+    /* transition: width 2s;
+    transition: flex-grow 1000ms linear; */
+    transition:all ease-in-out 1s;
+    margin-top: 10px;
+}
+
+.initial-grow{
+    margin-top: -20.5px !important;
+    transition:all 2s;
 }
