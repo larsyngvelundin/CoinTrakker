@@ -7,8 +7,10 @@ import db_files.get_address_from_id
 import db_files.get_hash_from_id
 import db_files.get_id_from_address
 import db_files.get_id_from_hash
+import db_files.get_balance_from
+import db_files.get_balance_to
 import db_files.get_transactions_from
-import db_files.get_transactions_to
+# import db_files.get_balance_to
 import db_files.initialize
 import db_files.print_all
 import db_files.save_address
@@ -55,6 +57,13 @@ def get_id_from_address(id):
 def get_id_from_hash(id):
     return db_files.get_id_from_hash.main(id)
 
+#get_balance_from(from, from_block, to_block)
+def get_balance_from(address, from_block=0, to_block=0):
+    if (not to_block):
+        logger.debug("Setting to_block to latest")
+        to_block = rpc.get_block_count()
+    return db_files.get_balance_from.main(address, from_block=from_block, to_block=to_block)
+
 #get_transactions_from(from, from_block, to_block)
 def get_transactions_from(address, from_block=0, to_block=0):
     if (not to_block):
@@ -62,12 +71,12 @@ def get_transactions_from(address, from_block=0, to_block=0):
         to_block = rpc.get_block_count()
     return db_files.get_transactions_from.main(address, from_block=from_block, to_block=to_block)
 
-#get_transactions_to(from, from_block, to_block)
-def get_transactions_to(address, from_block=0, to_block=0):
+#get_balance_to(from, from_block, to_block)
+def get_balance_to(address, from_block=0, to_block=0):
     if (not to_block):
         logger.debug("Setting to_block to latest")
         to_block = rpc.get_block_count()
-    return db_files.get_transactions_to.main(address, from_block=from_block, to_block=to_block)
+    return db_files.get_balance_to.main(address, from_block=from_block, to_block=to_block)
 
 #initialize
 def initialize():
