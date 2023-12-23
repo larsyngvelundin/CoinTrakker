@@ -1,6 +1,9 @@
 from flask import Flask, render_template, Response, request, jsonify
 import math
+import json
 import random
+import db
+from loguru import logger
 
 app = Flask(__name__)
 
@@ -23,9 +26,26 @@ def fps():
     the_answer = random.randint(25, 60)
     return (str(the_answer))
 
-@app.route('/get_new')
+@app.route('/get_transactions_from_address', methods=['POST'])
+def get_transactions_from_address():
+    #Receives JSON with "address" (Upgrade for block information later)
+    address = json.loads(request.data)['address']
+    logger.debug(address)
+    transactions = db.get_transactions_from(address)
+    logger.debug(transactions)
+    return jsonify(transactions)
+
+@app.route('/get_new', methods=['POST'])
 def get_new():
-    new_data = {'content':f"{str(random.randint(0,10))}"}
+    # print("get new")
+    # print(dir(request))
+    # print(json.loads(request.data))
+    # print(request.data)
+    test = json.loads(request.data)
+    # data = request.json
+    # test = json.dumps(data)
+    print(test['data'])
+    new_data = {'content':'["Ford", "BMW", "Fiat"]'}
     return jsonify(new_data)
 
 @app.route('/')

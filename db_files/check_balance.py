@@ -11,7 +11,7 @@ def main(address, block=100):
         db.create_db(address)
         logger.debug(f"Created DB files")
     logger.debug(f"Trying to check transactions from 0 to {block}")
-    outgoing_balance = db.get_transactions_from(address, from_block = 0, to_block = block)
-    incoming_balance = db.get_transactions_to(address, from_block = 0, to_block = block)
+    outgoing_balance = db.get_balance_from(address, from_block = 0, to_block = block)
+    incoming_balance = db.get_balance_to(address, from_block = 0, to_block = block)
     total_balance = outgoing_balance + incoming_balance
     return total_balance

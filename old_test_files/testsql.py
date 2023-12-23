@@ -14,10 +14,10 @@ import db
 # db.print_all("test3")
 address = "test4"
 print(f"getting outgoing for {address}")
-outgoing_balance = db.get_transactions_from(address,0,100)
+outgoing_balance = db.get_balance_from(address,0,100)
 print(f"Outgoing: {outgoing_balance}")
 print(f"getting incoming for {address}")
-incoming_balance = db.get_transactions_to(address,0,100)
+incoming_balance = db.get_balance_to(address,0,100)
 print(f"Incoming: {incoming_balance}")
 
 print(f"Getting full balance for {address}")
