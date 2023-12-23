@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', (event) => {
     console.log("Ran after DOM was loaded");
     var wallets = document.getElementsByClassName('wallet-div');
-    console.log("This is my wallet elements:", wallets)
+    // console.log("This is my wallet elements:", wallets)
     for (var i = 0; i < wallets.length; i++) {
         wallets[i].addEventListener('click', expandTransactions);
     }
