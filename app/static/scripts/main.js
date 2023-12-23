@@ -1,19 +1,30 @@
 document.addEventListener('DOMContentLoaded', (event) => {
     console.log("Test")
     document.getElementById('addnumtest').addEventListener('click', function() {
-        fetch('/get_new')
+        fetch('/get_new', {
+            method: "POST",
+            body: JSON.stringify({
+                "data": 1
+            }),
+        })
             .then(response => response.json())
             .then(data => {
-                var newElement = document.createElement('span');
-                newElement.textContent = data.content;
-                newElement.classList.add("initial-grow")
-                newElement.style.zIndex = globalZ;
-                globalZ -= 1;
-                document.getElementById('testingdiv').appendChild(newElement);
+                console.log(data.content)
+                var test = JSON.parse(data.content)
+                for(var i = 0; i < test.length; i++){
+                    var newElement = document.createElement('span');
+                    console.log(test, "test in loop")
+                    console.log(test, "test in loop")
+                    newElement.textContent = test[i];
+                    newElement.classList.add("initial-grow")
+                    newElement.style.zIndex = globalZ;
+                    globalZ -= 1;
+                    document.getElementById('testingdiv').appendChild(newElement);
                 // const elements = document.querySelectorAll('.initial-grow');
                 // elements.forEach(element => {
                 //     element.classList.remove('initial-grow');
                 //   });
+            }
                 removeInitialGrowClass();
             })
             .catch((error) => {

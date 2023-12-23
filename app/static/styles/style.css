@@ -9,7 +9,7 @@ body{
     align-items: center;   */
 }
 
-.flex-cont span{
+.flex-cont span, .flex-cont span div{
     display: block;
     width: auto;
     background-color: white;
