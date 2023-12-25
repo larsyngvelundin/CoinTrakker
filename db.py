@@ -10,6 +10,7 @@ import db_files.get_db_name
 import db_files.get_hash_from_id
 import db_files.get_id_from_address
 import db_files.get_id_from_hash
+import db_files.get_latest_parsed_block
 import db_files.get_transactions_from
 # import db_files.get_transactions_to
 import db_files.initialize
@@ -75,6 +76,10 @@ def get_id_from_address(id):
 #getidfromhash
 def get_id_from_hash(id):
     return db_files.get_id_from_hash.main(id)
+
+#getlatestparsedblock
+def get_latest_parsed_block():
+    return db_files.get_latest_parsed_block.main()
 
 #get_transactions_from(from, from_block, to_block)
 def get_transactions_from(address, from_block=0, to_block=0):

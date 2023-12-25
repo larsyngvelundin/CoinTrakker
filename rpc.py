@@ -17,6 +17,7 @@ import rpc_files.get_received_by_address
 
 #Custom
 import rpc_files.get_address_from_pubkey
+import rpc_files.get_block_time
 import rpc_files.get_fee
 import rpc_files.get_recipient_addresses
 import rpc_files.get_sender_address
@@ -196,6 +197,10 @@ def get_received_by_address(address):
 # getaddressfrompubkey
 def get_address_from_pubkey(pubkey_hex):
     return rpc_files.get_address_from_pubkey.main(pubkey_hex)
+
+#getblocktime
+def get_block_time(block_height):
+    return rpc_files.get_block_time.main(rpc_connection, block_height)
 
 #getfee
 def get_fee(transaction_hash):
