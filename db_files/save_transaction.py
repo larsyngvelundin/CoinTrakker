@@ -24,23 +24,25 @@ def main(amount, to_address, from_address, block, transaction_hash):
 
     #Save outgoing for sender
     try:
-        con = sqlite3.connect(f"local_db/outgoing/{from_address}.db")
-        sql =  f'INSERT INTO transactions (amount, to_address, block, transaction_hash, UID) values(?,?,?,?,?)'
+        db_name = db.get_db_name(from_address)
+        con = sqlite3.connect(f"local_db/outgoing/{db_name}.db")
+        sql =  f'INSERT INTO "{from_address}" (amount, to_address, block, transaction_hash, UID) values(?,?,?,?,?)'
         data = [(int(amount), int(to_address_id), int(block), int(transaction_hash_id), UID)]
         with con:
             con.executemany(sql, data)
-        logger.debug(f"Added {transaction_hash} to outgoing/{from_address}.db")
+        logger.debug(f"Added {transaction_hash} to outgoing/{db_name}.db")
     except Exception as error_msg:
         logger.debug(error_msg)
         logger.debug("already saved this transaction")
     #Save incoming for recipient
     try:
-        con = sqlite3.connect(f"local_db/incoming/{to_address}.db")
-        sql =  f'INSERT INTO transactions (amount, from_address, block, transaction_hash, UID) values(?, ?,?,?,?)'
+        db_name = db.get_db_name(to_address)
+        con = sqlite3.connect(f"local_db/incoming/{db_name}.db")
+        sql =  f'INSERT INTO "{to_address}" (amount, from_address, block, transaction_hash, UID) values(?, ?,?,?,?)'
         data = [(int(amount), int(from_address_id), int(block), int(transaction_hash_id), UID)]
         with con:
             con.executemany(sql, data)
-        logger.debug(f"Added {transaction_hash} to incoming/{to_address}.db")
+        logger.debug(f"Added {transaction_hash} to incoming/{db_name}.db")
     except Exception as error_msg:
         logger.debug(error_msg)
         logger.debug("already saved this transaction")

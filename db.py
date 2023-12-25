@@ -4,13 +4,15 @@ import db_files.check_balance
 import db_files.create_db
 import db_files.db_exists
 import db_files.get_address_from_id
+import db_files.get_balance_from
+import db_files.get_balance_to
+import db_files.get_db_name
 import db_files.get_hash_from_id
 import db_files.get_id_from_address
 import db_files.get_id_from_hash
-import db_files.get_balance_from
-import db_files.get_balance_to
+import db_files.get_latest_parsed_block
 import db_files.get_transactions_from
-# import db_files.get_balance_to
+# import db_files.get_transactions_to
 import db_files.initialize
 import db_files.print_all
 import db_files.save_address
@@ -45,6 +47,24 @@ def db_exists(address):
 def get_address_from_id(id):
     return db_files.get_address_from_id.main(id)
 
+#get_balance_from(from, from_block, to_block)
+def get_balance_from(address, from_block=0, to_block=0):
+    if (not to_block):
+        logger.debug("Setting to_block to latest")
+        to_block = rpc.get_block_count()
+    return db_files.get_balance_from.main(address, from_block=from_block, to_block=to_block)
+
+#get_balance_to(from, from_block, to_block)
+def get_balance_to(address, from_block=0, to_block=0):
+    if (not to_block):
+        logger.debug("Setting to_block to latest")
+        to_block = rpc.get_block_count()
+    return db_files.get_balance_to.main(address, from_block=from_block, to_block=to_block)
+
+#getdbname
+def get_db_name(address):
+    return db_files.get_db_name.main(address)
+
 #gethashfromid
 def get_hash_from_id(id):
     return db_files.get_hash_from_id.main(id)
@@ -57,12 +77,9 @@ def get_id_from_address(id):
 def get_id_from_hash(id):
     return db_files.get_id_from_hash.main(id)
 
-#get_balance_from(from, from_block, to_block)
-def get_balance_from(address, from_block=0, to_block=0):
-    if (not to_block):
-        logger.debug("Setting to_block to latest")
-        to_block = rpc.get_block_count()
-    return db_files.get_balance_from.main(address, from_block=from_block, to_block=to_block)
+#getlatestparsedblock
+def get_latest_parsed_block():
+    return db_files.get_latest_parsed_block.main()
 
 #get_transactions_from(from, from_block, to_block)
 def get_transactions_from(address, from_block=0, to_block=0):
@@ -70,13 +87,6 @@ def get_transactions_from(address, from_block=0, to_block=0):
         logger.debug("Setting to_block to latest")
         to_block = rpc.get_block_count()
     return db_files.get_transactions_from.main(address, from_block=from_block, to_block=to_block)
-
-#get_balance_to(from, from_block, to_block)
-def get_balance_to(address, from_block=0, to_block=0):
-    if (not to_block):
-        logger.debug("Setting to_block to latest")
-        to_block = rpc.get_block_count()
-    return db_files.get_balance_to.main(address, from_block=from_block, to_block=to_block)
 
 #initialize
 def initialize():
