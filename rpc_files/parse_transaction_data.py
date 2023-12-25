@@ -4,7 +4,7 @@ import convert
 import rpc
 
 def main(transaction_hash):
-    logger.debug(f"Checking new transaction hash\n{transaction_hash}")
+    logger.debug(f"Checking new transaction hash\n{transaction_hash}\n########################")
     raw_transaction = rpc.get_raw_transaction(transaction_hash)
     decoded_transaction = rpc.decode_raw_transaction(raw_transaction)
     logger.debug(f"Decoded: {decoded_transaction}")
@@ -32,7 +32,7 @@ def main(transaction_hash):
             try:
                 pubkey = item['scriptPubKey']['asm'].split(" ")[0]
                 to_address = rpc.get_address_from_pubkey(pubkey)
-                logger.debug(f"Is the sender the recipient? {to_address != sender}")
+                logger.debug(f"Is the sender the recipient? {to_address == sender}")
                 if (to_address != sender):
                     amount = convert.to_sats(item['value'])
                     logger.debug(f"{amount}")

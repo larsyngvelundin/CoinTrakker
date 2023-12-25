@@ -1,7 +1,5 @@
-import base58
 from bitcoinrpc.authproxy import AuthServiceProxy, JSONRPCException
 from decouple import config
-import hashlib
 from loguru import logger
 
 #Blockchain
@@ -18,6 +16,7 @@ import rpc_files.create_wallet
 import rpc_files.get_received_by_address
 
 #Custom
+import rpc_files.get_address_from_pubkey
 import rpc_files.get_fee
 import rpc_files.get_recipient_addresses
 import rpc_files.get_sender_address
@@ -196,14 +195,7 @@ def get_received_by_address(address):
 
 # getaddressfrompubkey
 def get_address_from_pubkey(pubkey_hex):
-    pubkey_bytes = bytes.fromhex(pubkey_hex)
-    sha256 = hashlib.sha256(pubkey_bytes).digest()
-    ripemd160 = hashlib.new('ripemd160', sha256).digest()
-    extended = b'\x00' + ripemd160 
-    checksum = hashlib.sha256(hashlib.sha256(extended).digest()).digest()[:4]
-    address_bytes = extended + checksum
-    address = base58.b58encode(address_bytes)
-    return address.decode()
+    return rpc_files.get_address_from_pubkey.main(pubkey_hex)
 
 #getfee
 def get_fee(transaction_hash):
