@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Getting Started with Chart JS with www.chartjs3.com</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+        }
+
+        .chartMenu {
+            width: 100vw;
+            height: 40px;
+            background: #1A1A1A;
+            color: rgba(54, 162, 235, 1);
+        }
+
+        .chartMenu p {
+            padding: 10px;
+            font-size: 20px;
+        }
+
+        .chartCard {
+            width: 100vw;
+            height: calc(100vh - 40px);
+            background: rgba(54, 162, 235, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chartBox {
+            width: 700px;
+            padding: 20px;
+            border-radius: 20px;
+            border: solid 3px rgba(54, 162, 235, 1);
+            background: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="chartMenu">
+        <p>WWW.CHARTJS3.COM (Chart JS <span id="chartVersion"></span>)</p>
+    </div>
+    <div class="chartCard">
+        <div class="chartBox">
+            <canvas id="myChart"></canvas>
+        </div>
+    </div>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-sankey@0.12.0/dist/chartjs-chart-sankey.min.js"></script>
+    <script>
+
+        //https://cdn.jsdelivr.net/npm/chartjs-chart-sankey@0.12.0/dist/chartjs-chart-sankey.min.js
+
+        const colors = {
+            A: 'red',
+            B: 'green',
+            C: 'blue',
+            D: 'gray',
+            E: 'gray',
+            F: 'gray',
+            G: 'gray',
+            H: 'gray',
+            I: 'gray',
+            J: 'gray',
+            K: 'gray',
+            L: 'gray',
+            M: 'gray',
+            N: 'gray',
+            O: 'gray',
+            P: 'gray',
+            Q: 'gray',
+            R: 'gray',
+            S: 'gray',
+            T: 'gray'
+        }
+        const getColor = (key) => colors[key]
+        // console.log(getColor("A"))
+        // setup 
+        const data = {
+            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            datasets: [{
+                label: 'Weekly Sales',
+                data: [
+                    { from: "A", to: "B", flow: 800 },
+                    { from: "A", to: "C", flow: 800 },
+                    { from: "B", to: "D", flow: 400 },
+                    { from: "B", to: "E", flow: 400 },
+                    { from: "C", to: "F", flow: 400 },
+                    { from: "C", to: "G", flow: 400 },
+                    { from: "D", to: "H", flow: 200 },
+                    { from: "D", to: "I", flow: 200 },
+                    { from: "E", to: "J", flow: 200 },
+                    { from: "E", to: "K", flow: 200 },
+                    { from: "F", to: "K", flow: 200 },
+                    { from: "F", to: "L", flow: 200 },
+                    { from: "G", to: "L", flow: 200 },
+                    { from: "G", to: "M", flow: 200 }
+                ],
+                colorFrom: (c) => getColor(c.dataset.data[c.dataIndex].from),
+                colorTo: (c) => getColor(c.dataset.data[c.dataIndex].to),
+                borderWidth: 1,
+                events: ['click']
+            }]
+        };
+
+        var fetchedData = [
+            { from: "H", to: "N", flow: 200 },
+            { from: "I", to: "O", flow: 200 },
+            { from: "J", to: "P", flow: 200 },
+            { from: "K", to: "Q", flow: 400 },
+            { from: "L", to: "R", flow: 400 },
+            { from: "M", to: "S", flow: 100 },
+            { from: "M", to: "T", flow: 100 }
+        ];
+        function addData() {
+            // chart.data.labels.push(label);
+            // console.log("Trying to add data");
+            var newData = fetchedData.pop()
+            // console.log(myChart);
+            // console.log(myChart.data);
+            // console.log(myChart.data.datasets[0].data);
+            // var test = myChart.data.datasets[0].data.pop(0)
+            var test = myChart.data.datasets[0].data.push(newData)
+            // myChart.data.datasets.forEach((dataset) => {
+            //     dataset.data.push(newData);
+            // });
+            myChart.update();
+        }
+        function addAllData() {
+            // chart.data.labels.push(label);
+            // console.log("Trying to add data");
+            // var newData = fetchedData.pop()
+            // console.log(myChart);
+            // console.log(myChart.data);
+            // console.log(myChart.data.datasets[0].data);
+            // var test = myChart.data.datasets[0].data.pop(0)
+            for (var i = 0; i < fetchedData.length; i++) {
+                var test = myChart.data.datasets[0].data.push(fetchedData[i])
+            }
+            // myChart.data.datasets.forEach((dataset) => {
+            //     dataset.data.push(newData);
+            // });
+            myChart.update();
+        }
+        // function addData(e) {
+        //     console.log(e);
+        // }
+
+        // config 
+        const config = {
+            type: 'sankey',
+            data,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+                // onClick: (e) => { addData(e) },
+                // interaction: {
+                //     mode: 'nearest'
+                // }
+            }
+        };
+
+        // render init block
+        const ctx = document.getElementById('myChart');
+        const myChart = new Chart(
+            ctx,
+            config
+        );
+
+        function clickHandler(click){
+            console.log("HUH");
+            const points = myChart.getElementsAtEventForMode(click, 'nearest', {interserct: true}, true);
+            console.log("HUH", points[0].element.from.key);
+        }
+
+        ctx.onclick = clickHandler;
+
+
+        // Instantly assign Chart.js version
+        const chartVersion = document.getElementById('chartVersion');
+        chartVersion.innerText = Chart.version;
+    </script>
+
+</body>
+<style>
+    body{
+        background-color: #333;
+    }
+</style>
+</html>
