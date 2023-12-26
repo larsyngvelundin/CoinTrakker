@@ -8,7 +8,7 @@ def main(address, from_block=0, to_block=100):
     if(isinstance(address, int)):
         address = db.get_address_from_id(address)
     logger.debug(f"checking from {address}")
-    sql = f"SELECT amount FROM '{address}' WHERE block BETWEEN {from_block} and {to_block}"
+    sql = f"SELECT amount FROM '{address}' WHERE block BETWEEN {from_block} AND {to_block}"
     db_name = db.get_db_name(address)
     con = sqlite3.connect(f"local_db/outgoing/{db_name}.db")
     with con:

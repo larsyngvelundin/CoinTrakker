@@ -1,55 +1,62 @@
-<html>
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <script src="https://unpkg.com/htmx.org@1.6.1"></script>
-    <link rel="stylesheet" href="https://necolas.github.io/normalize.css/8.0.1/normalize.css">
-    <link rel="stylesheet" href="{{ url_for('static',filename='/styles/style.css') }}">
-    <script src="{{ url_for('static',filename='/scripts/main.js') }}" defer></script>
-    <!-- <link rel="stylesheet" href="app/styles/style.css"> -->
-    <!-- <script src="https://unpkg.com/d3-array@1"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Sankey Diagram</title>
+  <!-- <script src="https://d3js.org/d3.v6.min.js"></script> -->
+  <!-- <script src="https://d3js.org/d3-sankey.v0.66.min.js"></script> -->
+  <!-- <script type="module" src="{{ url_for('static',filename='/scripts/d3/sankey.js') }}"></script> -->
+  <script src="https://d3js.org/d3.v6.min.js"></script>
+  <script src="https://unpkg.com/d3-array@1"></script>
     <script src="https://unpkg.com/d3-collection@1"></script>
     <script src="https://unpkg.com/d3-path@1"></script>
     <script src="https://unpkg.com/d3-shape@1"></script>
     <script src="https://unpkg.com/d3-sankey@0"></script>
-    <script src="https://d3js.org/d3.v4.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/gh/holtzy/D3-graph-gallery@master/LIB/sankey.js"></script>
-    <script src="http://d3js.org/d3.v3.min.js"></script>
-    <script src="{{ url_for('static',filename='/scripts/sankey.js') }}" defer></script>
-    <script>
-        var sankey = d3.sankey();
-    </script>
+  <script type="module">
+  </script>
 </head>
-
-
 <body>
-    <div id="sankey-container">
-        <button id="addnodesankey">Add node</button>
-    </div>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8  offset-lg-2">
-                <!-- <button onclick=myFunction()>Add via flask</button>
-                    <button id="addnumtest">Add via JS</button>
-                    <button id="addnumtestmult">Add multiple via JS</button>
-                    <button id="addnumtestdyn">Add dynamic via JS</button> -->
-                <div class="flex-cont" id="testingdiv">
-                    <div id="1ExF15z6YxFrNZHcnH2sYohbKBh47b1aow" class="wallet-div" data-checked-to="0">1ExF....1aow
-                    </div>
-                    <div id="1A1RWwZHpWd3x1q6ZX5gtrxhwAx5pbZGpb" class="wallet-div" data-checked-to="0">1A1R....ZGpb
-                    </div>
-                    <div id="1A2VHcohqFRAU4DijTx8aWMWmadeEwFRJT" class="wallet-div" data-checked-to="0">1A2V....FRJT
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- <script>
-            async function myFunction() {
-  const a = await fetch("/set_test")
-}   
-        console.log("in index")
-        </script> -->
+  <div id="sankey-container"></div>
+  <!-- <script src="your_script.js"></script> -->
+  <script type="module" src="{{ url_for('static',filename='/scripts/new_sankey_test.js') }}" defer></script>
 </body>
+<script>
+    //test data
 
+    // //get width and height of window
+    // const width = window.innerWidth;
+    // const height = window.innerHeight;
+    // //set sankey generator
+    // let sankey = d3.sankey()
+    //     .nodeWidth(15)
+    //     .nodePadding(10)
+    //     .size([width, height]);
+    // //create svg
+    // let svg = d3.select("#sankey-container").append("svg")
+    // .attr("width", width)
+    // .attr("height", height)
+    // .append("g")
+    // .attr("transform", "translate(0,0)");
+    
+    // //function to draw diagram to svg
+    // function drawSankey(data){
+    //     sankey.nodes(data.nodes)
+    //     .links(data.links)
+    //     // .layout(32);
+
+    //     let path = sankey.link();
+    //     svg.selectAll(".link")
+    //     .data(data.links)
+    //     .enter().append("path")
+    // }
+    // drawSankey(data);
+    // console.log("end of script");
+</script>
+
+<style>
+    body{
+        background-color: #333;
+    }
+</style>
 </html>
