@@ -1,3 +1,74 @@
+
+// import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+
+// import * as d3 from d3-sankey
+
+// let data = {
+//     nodes: [
+//         { name: "A" },
+//         { name: "B" },
+//         { name: "C" },
+//         { name: "D" },
+//         { name: "E" },
+//         { name: "F" },
+//         { name: "G" }
+//     ],
+//     links: [
+//         // { source: "A", target: "B", value: 10 },
+//         // { source: "A", target: "C", value: 10 },
+//         // { source: "B", target: "D", value: 10 },
+//         // { source: "B", target: "E", value: 10 },
+//         // { source: "C", target: "F", value: 10 },
+//         // { source: "C", target: "G", value: 10 }
+//     ]
+// };
+
+function delay(time) {
+    return new Promise(resolve => setTimeout(resolve, time));
+}
+// Set up initial data
+const initialNodes = [
+    { name: "A" },
+    { name: "B" },
+    { name: "C" },
+    { name: "D" },
+    { name: "E" },
+    { name: "F" },
+    { name: "G" }
+];
+const initialLinks = [
+    { source: 0, target: 1, value: 10 },
+    { source: 0, target: 2, value: 10 },
+    { source: 1, target: 3, value: 10 },
+    { source: 1, target: 4, value: 10 },
+    { source: 2, target: 5, value: 10 },
+    { source: 2, target: 6, value: 10 }
+];
+
+var graph = {
+    "nodes": [
+        { "name": "A" },
+        { "name": "B" },
+        { "name": "C" },
+        { "name": "D" },
+        { "name": "E" },
+        { "name": "F" },
+        { "name": "G" }
+    ],
+    "links": [
+        { "source": "A", "target": "B", "value": "4.5" },
+        { "source": "A", "target": "C", "value": "5.5" },
+        { "source": "B", "target": "D", "value": "2.1" },
+        { "source": "B", "target": "E", "value": "2.4" },
+        { "source": "C", "target": "F", "value": "3.1" },
+        { "source": "C", "target": "G", "value": "2.4" }
+    ]
+}
+
+
+//Some version of D3 sankey, i don't know
+///////////////////////////////////////////////
+
 d3.sankey = function () {
     var sankey = {},
         nodeWidth = 24,
@@ -291,160 +362,28 @@ d3.sankey = function () {
     return sankey;
 };
 
-//////////////////////////////////////////////////////////
+///////////////////////////////////////////////
 
-
-var graph = {
-    "links": [
-        { "source": "Agricultural Energy Use", "target": "Carbon Dioxide", "value": "1.4" },
-        { "source": "Agriculture", "target": "Agriculture Soils", "value": "5.2" },
-        { "source": "Agriculture", "target": "Livestock and Manure", "value": "5.4" },
-        { "source": "Agriculture", "target": "Other Agriculture", "value": "1.7" },
-        { "source": "Agriculture", "target": "Rice Cultivation", "value": "1.5" },
-        { "source": "Agriculture Soils", "target": "Nitrous Oxide", "value": "5.2" },
-        { "source": "Air", "target": "Carbon Dioxide", "value": "1.7" },
-        { "source": "Aluminium Non-Ferrous Metals", "target": "Carbon Dioxide", "value": "1.0" },
-        { "source": "Aluminium Non-Ferrous Metals", "target": "HFCs - PFCs", "value": "0.2" },
-        { "source": "Cement", "target": "Carbon Dioxide", "value": "5.0" },
-        { "source": "Chemicals", "target": "Carbon Dioxide", "value": "3.4" },
-        { "source": "Chemicals", "target": "HFCs - PFCs", "value": "0.5" },
-        { "source": "Chemicals", "target": "Nitrous Oxide", "value": "0.2" },
-        { "source": "Coal Mining", "target": "Carbon Dioxide", "value": "0.1" },
-        { "source": "Coal Mining", "target": "Methane", "value": "1.2" },
-        { "source": "Commercial Buildings", "target": "Carbon Dioxide", "value": "6.3" },
-        { "source": "Deforestation", "target": "Carbon Dioxide", "value": "10.9" },
-        { "source": "Electricity and heat", "target": "Agricultural Energy Use", "value": "0.4" },
-        { "source": "Electricity and heat", "target": "Aluminium Non-Ferrous Metals", "value": "0.4" },
-        { "source": "Electricity and heat", "target": "Cement", "value": "0.3" },
-        { "source": "Electricity and heat", "target": "Chemicals", "value": "1.3" },
-        { "source": "Electricity and heat", "target": "Commercial Buildings", "value": "5.0" },
-        { "source": "Electricity and heat", "target": "Food and Tobacco", "value": "0.5" },
-        { "source": "Electricity and heat", "target": "Iron and Steel", "value": "1.0" },
-        { "source": "Electricity and heat", "target": "Machinery", "value": "1.0" },
-        { "source": "Electricity and heat", "target": "Oil and Gas Processing", "value": "0.4" },
-        { "source": "Electricity and heat", "target": "Other Industry", "value": "2.7" },
-        { "source": "Electricity and heat", "target": "Pulp - Paper and Printing", "value": "0.6" },
-        { "source": "Electricity and heat", "target": "Residential Buildings", "value": "5.2" },
-        { "source": "Electricity and heat", "target": "T and D Losses", "value": "2.2" },
-        { "source": "Electricity and heat", "target": "Unallocated Fuel Combustion", "value": "2.0" },
-        { "source": "Energy", "target": "Electricity and heat", "value": "24.9" },
-        { "source": "Energy", "target": "Fugitive Emissions", "value": "4.0" },
-        { "source": "Energy", "target": "Industry", "value": "14.7" },
-        { "source": "Energy", "target": "Other Fuel Combustion", "value": "8.6" },
-        { "source": "Energy", "target": "Transportation", "value": "14.3" },
-        { "source": "Food and Tobacco", "target": "Carbon Dioxide", "value": "1.0" },
-        { "source": "Fugitive Emissions", "target": "Coal Mining", "value": "1.3" },
-        { "source": "Fugitive Emissions", "target": "Oil and Gas Processing", "value": "3.2" },
-        { "source": "Harvest \/ Management", "target": "Carbon Dioxide", "value": "1.3" },
-        { "source": "Industrial Processes", "target": "Aluminium Non-Ferrous Metals", "value": "0.4" },
-        { "source": "Industrial Processes", "target": "Cement", "value": "2.8" },
-        { "source": "Industrial Processes", "target": "Chemicals", "value": "1.4" },
-        { "source": "Industrial Processes", "target": "Other Industry", "value": "0.5" },
-        { "source": "Industry", "target": "Aluminium Non-Ferrous Metals", "value": "0.4" },
-        { "source": "Industry", "target": "Cement", "value": "1.9" },
-        { "source": "Industry", "target": "Chemicals", "value": "1.4" },
-        { "source": "Industry", "target": "Food and Tobacco", "value": "0.5" },
-        { "source": "Industry", "target": "Iron and Steel", "value": "3.0" },
-        { "source": "Industry", "target": "Oil and Gas Processing", "value": "2.8" },
-        { "source": "Industry", "target": "Other Industry", "value": "3.8" },
-        { "source": "Industry", "target": "Pulp - Paper and Printing", "value": "0.5" },
-        { "source": "Iron and Steel", "target": "Carbon Dioxide", "value": "4.0" },
-        { "source": "Land Use Change", "target": "Deforestation", "value": "10.9" },
-        { "source": "Land Use Change", "target": "Harvest \/ Management", "value": "1.3" },
-        { "source": "Landfills", "target": "Methane", "value": "1.7" },
-        { "source": "Livestock and Manure", "target": "Methane", "value": "5.1" },
-        { "source": "Livestock and Manure", "target": "Nitrous Oxide", "value": "0.3" },
-        { "source": "Machinery", "target": "Carbon Dioxide", "value": "1.0" },
-        { "source": "Oil and Gas Processing", "target": "Carbon Dioxide", "value": "3.6" },
-        { "source": "Oil and Gas Processing", "target": "Methane", "value": "2.8" },
-        { "source": "Other Agriculture", "target": "Methane", "value": "1.4" },
-        { "source": "Other Agriculture", "target": "Nitrous Oxide", "value": "0.3" },
-        { "source": "Other Fuel Combustion", "target": "Agricultural Energy Use", "value": "1.0" },
-        { "source": "Other Fuel Combustion", "target": "Commercial Buildings", "value": "1.3" },
-        { "source": "Other Fuel Combustion", "target": "Residential Buildings", "value": "5.0" },
-        { "source": "Other Fuel Combustion", "target": "Unallocated Fuel Combustion", "value": "1.8" },
-        { "source": "Other Industry", "target": "Carbon Dioxide", "value": "6.6" },
-        { "source": "Other Industry", "target": "HFCs - PFCs", "value": "0.4" },
-        { "source": "Pulp - Paper and Printing", "target": "Carbon Dioxide", "value": "1.1" },
-        { "source": "Rail - Ship and Other Transport", "target": "Carbon Dioxide", "value": "2.5" },
-        { "source": "Residential Buildings", "target": "Carbon Dioxide", "value": "10.2" },
-        { "source": "Rice Cultivation", "target": "Methane", "value": "1.5" },
-        { "source": "Road", "target": "Carbon Dioxide", "value": "10.5" },
-        { "source": "T and D Losses", "target": "Carbon Dioxide", "value": "2.2" },
-        { "source": "Transportation", "target": "Air", "value": "1.7" },
-        { "source": "Transportation", "target": "Rail - Ship and Other Transport", "value": "2.5" },
-        { "source": "Transportation", "target": "Road", "value": "10.5" },
-        { "source": "Unallocated Fuel Combustion", "target": "Carbon Dioxide", "value": "3.0" },
-        { "source": "Unallocated Fuel Combustion", "target": "Methane", "value": "0.4" },
-        { "source": "Unallocated Fuel Combustion", "target": "Nitrous Oxide", "value": "0.4" },
-        { "source": "Waste", "target": "Landfills", "value": "1.7" },
-        { "source": "Waste", "target": "Waste water - Other Waste", "value": "1.5" },
-        { "source": "Waste water - Other Waste", "target": "Methane", "value": "1.2" },
-        { "source": "Waste water - Other Waste", "target": "Nitrous Oxide", "value": "0.3" }
-    ],
-    "nodes": [
-        { "name": "Energy" },
-        { "name": "Industrial Processes" },
-        { "name": "Electricity and heat" },
-        { "name": "Industry" },
-        { "name": "Land Use Change" },
-        { "name": "Agriculture" },
-        { "name": "Waste" },
-        { "name": "Transportation" },
-        { "name": "Other Fuel Combustion" },
-        { "name": "Fugitive Emissions" },
-        { "name": "Road" }, { "name": "Air" },
-        { "name": "Rail - Ship and Other Transport" },
-        { "name": "Residential Buildings" },
-        { "name": "Commercial Buildings" },
-        { "name": "Unallocated Fuel Combustion" },
-        { "name": "Iron and Steel" },
-        { "name": "Aluminium Non-Ferrous Metals" },
-        { "name": "Machinery" },
-        { "name": "Pulp - Paper and Printing" },
-        { "name": "Food and Tobacco" },
-        { "name": "Chemicals" },
-        { "name": "Cement" },
-        { "name": "Other Industry" },
-        { "name": "T and D Losses" },
-        { "name": "Coal Mining" },
-        { "name": "Oil and Gas Processing" },
-        { "name": "Deforestation" },
-        { "name": "Harvest \/ Management" },
-        { "name": "Agricultural Energy Use" },
-        { "name": "Agriculture Soils" },
-        { "name": "Livestock and Manure" },
-        { "name": "Rice Cultivation" },
-        { "name": "Other Agriculture" },
-        { "name": "Landfills" },
-        { "name": "Waste water - Other Waste" },
-        { "name": "Carbon Dioxide" },
-        { "name": "HFCs - PFCs" },
-        { "name": "Methane" },
-        { "name": "Nitrous Oxide" }
-    ]
-}
-
-
-/////////////////////////////////////////////////////////
-
-var units = "Widgets";
+var units = "BTC";
 
 var margin = { top: 10, right: 10, bottom: 10, left: 10 },
-    width = 1200 - margin.left - margin.right,
-    height = 740 - margin.top - margin.bottom;
+    width = window.innerWidth / 2 - margin.left - margin.right,
+    height = window.innerHeight / 2 - margin.top - margin.bottom;
 
-var formatNumber = d3.format(",.0f"),    // zero decimal places
-    format = function (d) { return formatNumber(d) + " " + units; },
-    color = d3.scale.category20();
+var formatNumber = d3.format(",.2f");    // zero decimal places
+var format = function (d) { return formatNumber(d) + " " + units; };
+// var color = 
+
 
 // append the svg canvas to the page
-var svg = d3.select("#chart").append("svg")
+var svg = d3.select("#sankey-container").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
     .attr("transform",
         "translate(" + margin.left + "," + margin.top + ")");
+
+
 
 // Set the sankey diagram properties
 var sankey = d3.sankey()
@@ -452,10 +391,12 @@ var sankey = d3.sankey()
     .nodePadding(30)
     .size([width, height]);
 
+
 var path = sankey.link();
 
+
 // load the data
-(function (graph) {
+function drawSankeyDiagram(graph) {
 
     var nodeMap = {};
     graph.nodes.forEach(function (x) { nodeMap[x.name] = x; });
@@ -496,20 +437,23 @@ var path = sankey.link();
         .enter().append("g")
         .attr("class", "node")
         .attr("transform", (d) => `translate(${d.x},${d.y})`)
-        .call(d3.behavior.drag()
-            .origin((d) => d)
-            .on("dragstart", () => {
-                this.parentNode.appendChild(this);
-            })
-            .on("drag", dragmove)
-        );
+        .on('click', addNodes);
+    // .call(d3.behavior.drag()
+    //     .origin((d) => d)
+    //     .on("dragstart", () => {
+    //         this.parentNode.appendChild(this);
+    //     })
+    //     .on("drag", dragmove)
+    // );
 
     // add the rectangles for the nodes
+
     node.append("rect")
         .attr("height", (d) => d.dy)
         .attr("width", sankey.nodeWidth())
         .style("fill", function (d) {
-            return d.color = color(d.name.replace(/ .*/, ""));
+            d.color = "#" + stringToColorHex("example string");
+            return d.color;
         })
         .style("stroke", function (d) {
             return d3.rgb(d.color).darker(2);
@@ -543,4 +487,78 @@ var path = sankey.link();
         link.attr("d", path);
     }
 
-})(graph);
+
+}
+var graph_copy = JSON.parse(JSON.stringify(graph));
+drawSankeyDiagram(graph_copy);
+await delay(1000);
+console.log("Trying again");
+graph_copy = JSON.parse(JSON.stringify(graph));
+drawSankeyDiagram(graph_copy);
+
+//create new nodes?
+function addNodes(d) {
+    console.log("Trying to add nodes");
+    console.log(d);
+    console.log(graph.nodes);
+    console.log(graph.links);
+    var newNode = {
+        name: "H",
+        sourceLinks: [],
+        targetLinks: [],
+        x: 573.5,
+        y: 371.635
+    }
+    graph.nodes.push(newNode)
+    graph.nodes.forEach(function(target) {
+        if (target.name == "D"){
+            graph.links.push({source: newNode, target: target})
+        }
+    });
+    console.log(graph.nodes);
+    console.log(graph.links);
+    drawSankeyDiagram(graph);
+}
+
+function restart() {
+    node = node.data(nodes);
+  
+    node.enter().insert("circle", ".cursor")
+        .attr("class", "node")
+        .attr("r", 5)
+        .on("mousedown", mousedownNode);
+  
+    node.exit()
+        .remove();
+  
+    link = link.data(links);
+  
+    link.enter().insert("line", ".node")
+        .attr("class", "link");
+    link.exit()
+        .remove();
+  
+    force.start();
+  }
+
+function stringToColorHex(str) {
+    // A simple hash function
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+        hash = hash & hash; // Convert to 32bit integer
+    }
+
+    // Convert the hash to an RGB hexadecimal value
+    const red = (hash >> 16) & 0xFF;
+    const green = (hash >> 8) & 0xFF;
+    const blue = hash & 0xFF;
+
+    // Convert RGB to hexadecimal format
+    const colorHex = ((red << 16) | (green << 8) | blue).toString(16);
+
+    // Ensure leading zeros are not removed
+    return colorHex.padStart(6, '0');
+}
+// const hexColor = stringToColorHex("example string");
+// console.log(hexColor); // Outputs: Hexadecimal color code e.g. "a1b2c3"
