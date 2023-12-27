@@ -6,15 +6,15 @@ import rpc
 
 def main(from_block, to_block):
     for i in range(from_block, to_block+1):
-        try:
-            transaction_count = len(block['tx'])
-        except Exception:
-            transaction_count = 0
         block_hash = rpc.get_block_hash(i)
-        logger.info(f"Block: {i} with {transaction_count} transactions")
         if i: #If block height is > 0, aka not Genesis
             logger.debug("Checking non-Genesis block")
             block = rpc.get_block(block_hash)
+            try:
+                transaction_count = len(block['tx'])
+            except Exception:
+                transaction_count = 0
+            logger.info(f"Block: {i} with {transaction_count} transactions")
             logger.debug(block)
             for key in block.keys():
                 # logger.debug(f"{key}: {block[key]}")
