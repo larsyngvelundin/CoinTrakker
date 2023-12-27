@@ -1,200 +1,202 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>SANKEY Experiment</title>
+<style>
+    body {
+        background-color: #333;
+    }
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Getting Started with Chart JS with www.chartjs3.com</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            font-family: sans-serif;
-        }
+    .node rect {
+        cursor: move;
+        fill-opacity: .9;
+        shape-rendering: crispEdges;
+    }
 
-        .chartMenu {
-            width: 100vw;
-            height: 40px;
-            background: #1A1A1A;
-            color: rgba(54, 162, 235, 1);
-        }
+    .node text {
+        pointer-events: none;
+        /* text-shadow: 0 1px 0 #fff; */
+        
+        color: #fff;
+    }
 
-        .chartMenu p {
-            padding: 10px;
-            font-size: 20px;
-        }
+    .link {
+        fill: none;
+        stroke: #000;
+        stroke-opacity: .2;
+    }
 
-        .chartCard {
-            width: 100vw;
-            height: calc(100vh - 40px);
-            background: rgba(54, 162, 235, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .chartBox {
-            width: 700px;
-            padding: 20px;
-            border-radius: 20px;
-            border: solid 3px rgba(54, 162, 235, 1);
-            background: white;
-        }
-    </style>
-</head>
+    .link:hover {
+        stroke-opacity: .5;
+    }
+</style>
 
 <body>
-    <div class="chartMenu">
-        <p>WWW.CHARTJS3.COM (Chart JS <span id="chartVersion"></span>)</p>
-    </div>
-    <div class="chartCard">
-        <div class="chartBox">
-            <canvas id="myChart"></canvas>
-        </div>
-    </div>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-sankey@0.12.0/dist/chartjs-chart-sankey.min.js"></script>
+
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <!-- <script src="sankey.js"></script> -->
+    <script src="{{ url_for('static',filename='/scripts/sankey.js') }}"></script>
     <script>
+        var g_graph;
+        var units = "Widgets";
 
-        //https://cdn.jsdelivr.net/npm/chartjs-chart-sankey@0.12.0/dist/chartjs-chart-sankey.min.js
+        // set the dimensions and margins of the graph
+        var margin = { top: 10, right: 10, bottom: 10, left: 10 },
+            width = 700 - margin.left - margin.right,
+            height = 300 - margin.top - margin.bottom;
 
-        const colors = {
-            A: 'red',
-            B: 'green',
-            C: 'blue',
-            D: 'gray',
-            E: 'gray',
-            F: 'gray',
-            G: 'gray',
-            H: 'gray',
-            I: 'gray',
-            J: 'gray',
-            K: 'gray',
-            L: 'gray',
-            M: 'gray',
-            N: 'gray',
-            O: 'gray',
-            P: 'gray',
-            Q: 'gray',
-            R: 'gray',
-            S: 'gray',
-            T: 'gray'
-        }
-        const getColor = (key) => colors[key]
-        // console.log(getColor("A"))
-        // setup 
-        const data = {
-            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-            datasets: [{
-                label: 'Weekly Sales',
-                data: [
-                    { from: "A", to: "B", flow: 800 },
-                    { from: "A", to: "C", flow: 800 },
-                    { from: "B", to: "D", flow: 400 },
-                    { from: "B", to: "E", flow: 400 },
-                    { from: "C", to: "F", flow: 400 },
-                    { from: "C", to: "G", flow: 400 },
-                    { from: "D", to: "H", flow: 200 },
-                    { from: "D", to: "I", flow: 200 },
-                    { from: "E", to: "J", flow: 200 },
-                    { from: "E", to: "K", flow: 200 },
-                    { from: "F", to: "K", flow: 200 },
-                    { from: "F", to: "L", flow: 200 },
-                    { from: "G", to: "L", flow: 200 },
-                    { from: "G", to: "M", flow: 200 }
-                ],
-                colorFrom: (c) => getColor(c.dataset.data[c.dataIndex].from),
-                colorTo: (c) => getColor(c.dataset.data[c.dataIndex].to),
-                borderWidth: 1,
-                events: ['click']
-            }]
-        };
+        // format variables
+        var formatNumber = d3.format(",.0f"),    // zero decimal places
+            format = function (d) { return formatNumber(d) + " " + units; },
+            color = d3.scaleOrdinal(d3.schemeCategory20);
 
-        var fetchedData = [
-            { from: "H", to: "N", flow: 200 },
-            { from: "I", to: "O", flow: 200 },
-            { from: "J", to: "P", flow: 200 },
-            { from: "K", to: "Q", flow: 400 },
-            { from: "L", to: "R", flow: 400 },
-            { from: "M", to: "S", flow: 100 },
-            { from: "M", to: "T", flow: 100 }
-        ];
-        function addData() {
-            // chart.data.labels.push(label);
-            // console.log("Trying to add data");
-            var newData = fetchedData.pop()
-            // console.log(myChart);
-            // console.log(myChart.data);
-            // console.log(myChart.data.datasets[0].data);
-            // var test = myChart.data.datasets[0].data.pop(0)
-            var test = myChart.data.datasets[0].data.push(newData)
-            // myChart.data.datasets.forEach((dataset) => {
-            //     dataset.data.push(newData);
-            // });
-            myChart.update();
-        }
-        function addAllData() {
-            // chart.data.labels.push(label);
-            // console.log("Trying to add data");
-            // var newData = fetchedData.pop()
-            // console.log(myChart);
-            // console.log(myChart.data);
-            // console.log(myChart.data.datasets[0].data);
-            // var test = myChart.data.datasets[0].data.pop(0)
-            for (var i = 0; i < fetchedData.length; i++) {
-                var test = myChart.data.datasets[0].data.push(fetchedData[i])
+        // append the svg object to the body of the page
+        var svg = d3.select("body").append("svg")
+            .attr("width", width + margin.left + margin.right + 100)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform",
+                "translate(" + margin.left + "," + margin.top + ")");
+
+        // Set the sankey diagram properties
+        var sankey = d3.sankey()
+            .nodeWidth(36)
+            .nodePadding(40)
+            .size([width, height]);
+
+        var path = sankey.link();
+
+        // load the data
+        d3.json("{{ url_for('static',filename='/scripts/sankey.json') }}", function (error, graph) {
+            g_graph = graph;
+            sankey
+                .nodes(graph.nodes)
+                .links(graph.links)
+                .layout(32);
+
+            // add in the links
+            var link = svg.selectAll(".link")
+                .data(graph.links)
+                .enter().append("path")
+                .attr("class", "link")
+                .attr("d", path)
+                .style("stroke-width", function (d) { return Math.max(1, d.dy); })
+                .sort(function (a, b) { return b.dy - a.dy; })
+                .on("click", (e) => {console.log(e)});
+
+            // add the link titles
+            link.append("title")
+                .text(function (d) {
+                    return d.source.name + " → " +
+                        d.target.name + "\n" + format(d.value);
+                });
+
+            // add in the nodes
+            var node = svg.selectAll(".node")
+                .data(graph.nodes)
+                .enter().append("g")
+                .attr("class", "node")
+                .attr("transform", function (d) {
+                    return "translate(" + d.x + "," + d.y + ")";
+                })
+                .on("click", addNewNode);
+                // .call(d3.drag()
+                //     .subject(function (d) {
+                //         return d;
+                //     })
+                //     .on("start", function () {
+                //         this.parentNode.appendChild(this);
+                //     })
+                //     .on("drag", dragmove));
+
+            // add the rectangles for the nodes
+            node.append("rect")
+                .attr("height", function (d) { return d.dy; })
+                .attr("width", sankey.nodeWidth())
+                .style("fill", function (d) {
+                    return d.color = color(d.name.replace(/ .*/, ""));
+                })
+                .style("stroke", function (d) {
+                    return d3.rgb(d.color).darker(2);
+                })
+                .append("title")
+                .text(function (d) {
+                    return d.name + "\n" + format(d.value);
+                });
+
+            // add in the title for the nodes
+            node.append("text")
+                .attr("x", -6)
+                .attr("y", function (d) { return d.dy / 2; })
+                .attr("dy", ".35em")
+                .attr("text-anchor", "end")
+                .attr("transform", null)
+                .text(function (d) { return d.name; })
+                .filter(function (d) { return d.x < width / 2; })
+                .attr("x", 6 + sankey.nodeWidth())
+                .attr("text-anchor", "start");
+
+            // the function for moving the nodes
+            function dragmove(d) {
+                d3.select(this)
+                    .attr("transform",
+                        "translate("
+                        + d.x + ","
+                        + (d.y = Math.max(
+                            0, Math.min(height - d.dy, d3.event.y))
+                        ) + ")");
+                sankey.relayout();
+                link.attr("d", path);
             }
-            // myChart.data.datasets.forEach((dataset) => {
-            //     dataset.data.push(newData);
-            // });
-            myChart.update();
+        });
+
+        function addNewNode(e){
+            console.log(e.name)
+            newNode = {"node": 5, "name": "node5"}
+            newPath = {"source": 4, "target": 5, "value": 8}
+            console.log(svg._groups[0]);
+            var allNodes = svg.selectAll(".nodes")
+            console.log("allnodes", allNodes);
+            console.log(g_graph);
+            g_graph.nodes.push(newNode)
+            console.log(g_graph);
+            var allNode = svg.selectAll(".node")
+                .data(g_graph.nodes)
+                .enter().append("g")
+                .attr("class", "node")
+                .attr("transform", function (d) {
+                    return "translate(700, 15)";
+                })
+                .on("click", addNewNode);
+            // .append(newNode)
+            // allNodes.data(g_graph.nodes).enter().append('g').exit()
+            allNode.append("rect")
+                .attr("height", 240)
+                .attr("width", sankey.nodeWidth())
+                .style("fill", function (d) {
+                    return d.color = "#FF0000";
+                })
+                .style("stroke", function (d) {
+                    return d3.rgb(d.color).darker(2);
+                })
+                .append("title")
+                .text(function (d) {
+                    return d.name + "\n" + format(d.value);
+                });
+
+
+                g_graph.links.push(newPath)
+            // add in the links
+            var path = sankey.link();
+            var link = svg.selectAll(".link")
+                .data(g_graph.links)
+                .enter().append("path")
+                .attr("class", "link")
+                .attr("d", "M36,90C125.33333333333333,90 125.33333333333333,110.04736892353037 214.66666666666666,110.04736892353037")
+                .style("stroke-width", function (d) { return Math.max(1, d.dy); })
+                .sort(function (a, b) { return b.dy - a.dy; })
+                .on("click", (e) => {console.log(e)});
         }
-        // function addData(e) {
-        //     console.log(e);
-        // }
 
-        // config 
-        const config = {
-            type: 'sankey',
-            data,
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-                // onClick: (e) => { addData(e) },
-                // interaction: {
-                //     mode: 'nearest'
-                // }
-            }
-        };
-
-        // render init block
-        const ctx = document.getElementById('myChart');
-        const myChart = new Chart(
-            ctx,
-            config
-        );
-
-        function clickHandler(click){
-            console.log("HUH");
-            const points = myChart.getElementsAtEventForMode(click, 'nearest', {interserct: true}, true);
-            console.log("HUH", points[0].element.from.key);
-        }
-
-        ctx.onclick = clickHandler;
-
-
-        // Instantly assign Chart.js version
-        const chartVersion = document.getElementById('chartVersion');
-        chartVersion.innerText = Chart.version;
     </script>
 
 </body>
-<style>
-    body{
-        background-color: #333;
-    }
-</style>
-</html>
