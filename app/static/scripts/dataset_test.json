@@ -1,0 +1,156 @@
+{
+    "nodes": [
+        {
+            "node": 0,
+            "name": "A"
+        },
+        {
+            "node": 1,
+            "name": "B"
+        },
+        {
+            "node": 2,
+            "name": "C"
+        },
+        {
+            "node": 3,
+            "name": "D"
+        },
+        {
+            "node": 4,
+            "name": "E"
+        },
+        {
+            "node": 5,
+            "name": "F"
+        },
+        {
+            "node": 6,
+            "name": "G"
+        },
+        {
+            "node": 7,
+            "name": "H"
+        },
+        {
+            "node": 8,
+            "name": "I"
+        },
+        {
+            "node": 9,
+            "name": "J"
+        },
+        {
+            "node": 10,
+            "name": "K"
+        },
+        {
+            "node": 11,
+            "name": "L"
+        },
+        {
+            "node": 12,
+            "name": "M"
+        },
+        {
+            "node": 13,
+            "name": "N"
+        },
+        {
+            "node": 14,
+            "name": "O"
+        },
+        {
+            "node": 15,
+            "name": "P"
+        },
+        {
+            "node": 16,
+            "name": "Q"
+        },
+        {
+            "node": 17,
+            "name": "R"
+        },
+        {
+            "node": 18,
+            "name": "S"
+        },
+        {
+            "node": 19,
+            "name": "T"
+        }
+    ],
+    "links": [
+        {
+            "source": 0,
+            "target": 1,
+            "value": 800
+        },
+        {
+            "source": 0,
+            "target": 2,
+            "value": 800
+        },
+        {
+            "source": 1,
+            "target": 3,
+            "value": 400
+        },
+        {
+            "source": 1,
+            "target": 4,
+            "value": 400
+        },
+        {
+            "source": 2,
+            "target": 5,
+            "value": 400
+        },
+        {
+            "source": 2,
+            "target": 6,
+            "value": 400
+        },
+        {
+            "source": 3,
+            "target": 7,
+            "value": 200
+        },
+        {
+            "source": 3,
+            "target": 8,
+            "value": 200
+        },
+        {
+            "source": 4,
+            "target": 9,
+            "value": 200
+        },
+        {
+            "source": 4,
+            "target": 10,
+            "value": 200
+        },
+        {
+            "source": 5,
+            "target": 10,
+            "value": 200
+        },
+        {
+            "source": 5,
+            "target": 11,
+            "value": 200
+        },
+        {
+            "source": 6,
+            "target": 11,
+            "value": 200
+        },
+        {
+            "source": 6,
+            "target": 12,
+            "value": 200
+        }
+    ]
+}
