@@ -1,196 +1,156 @@
 console.log("main.js loaded");
 
 
+var clickStartTime = 0;
+var clickEndTime = 0;
+// var nodes = d3.range(1000).map(function (i) {
+//     return {
+//         index: i
+//     };
+// });
+var nodes = [{ "id": "starting point" }, { "id": "second point" }, { "id": "third point" }]
+console.log(nodes);
 
-var graph_data = {
-    "nodes": [
-        {
-            "node": 0,
-            "name": "node0"
-        },
-        {
-            "node": 1,
-            "name": "node1"
-        },
-        {
-            "node": 2,
-            "name": "node2"
-        },
-        {
-            "node": 3,
-            "name": "node3"
-        },
-        {
-            "node": 4,
-            "name": "node4"
-        }
-    ],
-    "links": [
-        {
-            "source": 0,
-            "target": 2,
-            "value": 2
-        },
-        {
-            "source": 1,
-            "target": 2,
-            "value": 2
-        },
-        {
-            "source": 1,
-            "target": 3,
-            "value": 2
-        },
-        {
-            "source": 0,
-            "target": 4,
-            "value": 2
-        },
-        {
-            "source": 2,
-            "target": 3,
-            "value": 2
-        },
-        {
-            "source": 2,
-            "target": 4,
-            "value": 2
-        },
-        {
-            "source": 3,
-            "target": 4,
-            "value": 4
-        }
-    ]
-}
-function id(d) {
-    return d.id;
-}
-var nodes = [
-    { "id": "Alice" },
-    { "id": "Bob" },
-    { "id": "Carol" }
-];
-
-var links = [
-    {
-        "source": "Alice",
-        "target": "Bob"
-    },
-    {
-        "source": "Bob",
-        "target": "Carol"
-    }
-];
-
-//testing other nodes and links
-graph_data.nodes = nodes
-graph_data.links = links
-
-console.log("nodes", graph_data.nodes);
-console.log("links", graph_data.links);
-
-var margin = { top: 10, right: 10, bottom: 10, left: 10 },
-    width = window.innerWidth - margin.left - margin.right,
-    height = window.innerHeight - margin.top - margin.bottom;
-
-// sankey.select("#sankey-container")
-var svg = d3.select("#sankey-container").append("svg")
-    .attr("width", width)
-    .attr("height", height)
-
-
-
-
-function sankeylink(d) {
-    var curvature = .5;
-    console.log("in sankeylink function");
-    function link(d) {
-        var x0 = d.source.x + d.source.dx,
-            x1 = d.target.x,
-            xi = d3.interpolateNumber(x0, x1),
-            x2 = xi(curvature),
-            x3 = xi(1 - curvature),
-            y0 = d.source.y + d.sy + d.dy / 2,
-            y1 = d.target.y + d.ty + d.dy / 2;
-        return "M" + x0 + "," + y0
-            + "C" + x2 + "," + y0
-            + " " + x3 + "," + y1
-            + " " + x1 + "," + y1;
-    }
-
-    link.curvature = function (_) {
-        if (!arguments.length) return curvature;
-        curvature = +_;
-        return link;
+var links = d3.range(nodes.length - 1).map(function (i) {
+    return {
+        source: Math.floor(Math.sqrt(i)),
+        target: i + 1
     };
+});
 
-    return link;
-};
+var simulation = d3.forceSimulation(nodes)
+    .force("charge", d3.forceManyBody())
+    .force("link", d3.forceLink(links).distance(20).strength(1))
+    .force("x", d3.forceX())
+    .force("y", d3.forceY())
+    .on("tick", ticked);
 
-function mylink(d) {
-    console.log("in mylink");
-    var curvature = .5;
-    console.log("d", d);
-    var x0 = d.source.x + d.source.dx,
-        x1 = d.target.x,
-        xi = d3.interpolateNumber(x0, x1),
-        x2 = xi(curvature),
-        x3 = xi(1 - curvature),
-        y0 = d.source.y + d.sy + d.dy / 2,
-        y1 = d.target.y + d.ty + d.dy / 2;
-    console.log("x0", x0);
-    console.log("x1", x1);
-    console.log("xi", xi);
-    console.log("x2", x2);
-    console.log("x3", x3);
-    console.log("y0", y0);
-    console.log("y1", y1);
-    return "M" + x0 + "," + y0
-        + "C" + x2 + "," + y0
-        + " " + x3 + "," + y1
-        + " " + x1 + "," + y1;
+var canvas = document.querySelector("canvas");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+var context = canvas.getContext("2d");
+var width = canvas.width;
+var height = canvas.height;
+
+
+d3.select(canvas)
+    .call(d3.drag()
+        .container(canvas)
+        .subject(dragsubject)
+        .on("start", dragstarted)
+        .on("drag", dragged)
+        .on("end", dragended));
+
+function ticked() {
+    context.clearRect(0, 0, width, height);
+    context.save();
+    context.translate(width / 2, height / 2);
+
+    context.beginPath();
+    links.forEach(drawLink);
+    context.strokeStyle = "#aaa";
+    context.stroke();
+
+    context.beginPath();
+    // console.log("nodes", nodes);
+    nodes.forEach(drawNode);
+    context.fill();
+    context.strokeStyle = "#fff";
+    context.stroke();
+
+    context.restore();
 }
 
-// var path = sankeylink();
-// console.log("path:", path);
+function addNode(existingNode) {
+    console.log("Trying to add");
+    console.log("existingNode", existingNode);
+    var newNode = {
+        "id": "new node",
+        // "vx": existingNode.vx,
+        // "vy": existingNode.vy,
+        "x": existingNode.x,
+        "y": existingNode.y,
+        "index": nodes.length
+    }
+    console.log("newNode", newNode);
+    nodes.push(newNode)
+    console.log("nodes",nodes);
+    newLink = {
+        source: nodes[existingNode.index],
+        target: nodes[newNode.index],
+        index: links.length
+    }
+    console.log("links", links);
+    links.push(newLink);
+    simulation.restart();
+    // links
+}
 
+function dragsubject() {
+    return simulation.find(d3.event.x - width / 2, d3.event.y - height / 2);
+}
 
-// .layout(32);
+function dragstarted() {
+    clickStartTime = Date.now();
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    d3.event.subject.fx = d3.event.subject.x;
+    d3.event.subject.fy = d3.event.subject.y;
+}
 
-var sankey = d3.sankey().nodeWidth(36).nodePadding(40).size([width, height]);
-console.log("sankey:", sankey);
-// d3.json(JSON.stringify(graph_data), function (error, graph) {
-console.log("before the json call");
-d3.json("../static/scripts/sankey.json", function (error, graph) {
-    console.log("in the json call");
+function dragged() {
+    d3.event.subject.fx = d3.event.x;
+    d3.event.subject.fy = d3.event.y;
+    // console.log("d3.event.subject.x", d3.event.subject.x);
+    console.log("d3.event.subject.y", d3.event.subject.y);
+}
 
+function calculateDistance(x1, y1, x2, y2) {
+    const distance = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+    return distance;
+}
 
-    sankey.nodes(graph_data.nodes)
-        .links(graph_data.links);
+function dragended() {
+    console.log("simulation", simulation);
+    console.log("simulation..nodes", simulation.nodes());
+    clickEndTime = Date.now();
+    if (!d3.event.active) simulation.alphaTarget(0);
+    d3.event.subject.fx = null;
+    d3.event.subject.fy = null;
+    console.log("d3.event.subject", d3.event.subject);
+    console.log("d3.event", d3.event);
+    // console.log("click ended");
+    var timeHeld = clickEndTime - clickStartTime;
+    // console.log("clickStartTime", clickStartTime);
+    // console.log("clickEndTime", clickEndTime);
+    console.log("timeHeld", timeHeld);
+    if (timeHeld < 150) {
+        console.log("This was probably a click");
+        mouseY = d3.event.sourceEvent.clientY - height / 2;
+        console.log("mouseY", mouseY);
+        mouseX = d3.event.sourceEvent.clientX - width / 2;
+        console.log("mouseX", mouseX);
+        var distance = calculateDistance(d3.event.subject.x, d3.event.subject.y, mouseX, mouseY)
+        console.log("distance", distance);
+        if (distance < 5) {
+            console.log("probably clicked on node", d3.event.subject.id);
+            addNode(d3.event.subject);
+        }
+        else {
+            console.log("Did not click close enough to warrant expansion for", d3.event.subject.id);
+        }
+    }
+    else {
+        console.log("This was probably a drag");
+    }
+}
 
-    var links = svg.selectAll(".link")
-        .data(graph.links)
-        .enter().append("path")
-        .attr("class", "link")
-        .join("path")
-        .attr("d", mylink)
+function drawLink(d) {
+    context.moveTo(d.source.x, d.source.y);
+    context.lineTo(d.target.x, d.target.y);
+}
 
-    console.log("d3.sankeyLinkHorizontal()", d3.sankeyLinkHorizontal(links[0]));
-
-    // svg.append("g")
-    //     .attr("fill", "none")
-    //     .attr("stroke", "#000")
-    //     .attr("stroke-opacity", 0.2)
-    //     .selectAll("path")
-    //     .data(graph_data.links)
-    //     .join("path")
-    //     .attr("d", mylink)
-    //     .attr("stroke-width", function (d) { return d.width; });
-
-    var nodes = svg.selectAll(".node")
-        .data(graph.nodes)
-        .enter().append("g")
-        .attr("class", "node")
-});
-console.log("after the json call");
+function drawNode(d) {
+    context.moveTo(d.x + 3, d.y);
+    context.arc(d.x, d.y, 3, 0, 2 * Math.PI);
+}
