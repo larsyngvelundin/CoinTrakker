@@ -1,4 +1,4 @@
-console.log("main.js loaded");
+//console.log("main.js loaded");
 
 
 var clickStartTime = 0;
@@ -8,26 +8,75 @@ var clickEndTime = 0;
 //         index: i
 //     };
 // });
-var nodes = [{ "id": "starting point" }, { "id": "second point" }, { "id": "third point" }]
-console.log(nodes);
+var nodes_orig = [{ "id": "starting point" }, { "id": "second point" }, { "id": "third point" }, {"id": "j"}]
+//console.log(nodes_orig);
 
-var links = d3.range(nodes.length - 1).map(function (i) {
+let nodes = JSON.parse(JSON.stringify(nodes_orig));
+
+var links_orig = d3.range(nodes.length - 1).map(function (i) {
     return {
         source: Math.floor(Math.sqrt(i)),
         target: i + 1
     };
 });
+//console.log("links_orig", links_orig);
+let links = JSON.parse(JSON.stringify(links_orig));
+
+// nodes.push({"id": "pushed node"})
+// //console.log(nodes);
+
+var forceDistance = 10;
+var forceStrength = 0.1;
+var forceStrengthModifyer = 0.0;
+
+//send nodes list to a function
+//check if svg objects exist, and add new objects for new nodes
+//when svg object is clicked, call addNodes() with svg id
 
 var simulation = d3.forceSimulation(nodes)
     .force("charge", d3.forceManyBody())
-    .force("link", d3.forceLink(links).distance(20).strength(1))
-    .force("x", d3.forceX())
-    .force("y", d3.forceY())
+    .force("link", d3.forceLink(links).distance(forceDistance).strength(forceStrength))
+    // .force("x", d3.forceX())
+    // .force("y", d3.forceY())
     .on("tick", ticked);
+
+function redosim(old_nodes, spawn_node) {
+    // console.log("i get these nodes", nodes);
+    // console.log("these are my old nodes:", old_nodes);
+    // console.log("spawning new nodes at node number", spawn_node.index);
+    simulation = d3.forceSimulation(nodes)
+        .force("charge", d3.forceManyBody())
+        .force("link", d3.forceLink(links).distance(forceDistance).strength(forceStrength))
+        // .force("x", d3.forceX().strength(forceStrengthModifyer))
+        // .force("y", d3.forceY().strength(forceStrengthModifyer))
+        // .force("charge", d3.forceManyBody().strength(-30))
+        // .force("collide", d3.forceCollide().radius(20))
+        .on("tick", ticked);
+    for (var i = 0; i < old_nodes.length; i++) {
+        //console.log("currently checking node", nodes[i].id);
+        //console.log("new x", nodes[i].x);
+
+        //console.log("old x", old_nodes[i].x);
+        nodes[i].x = old_nodes[i].x;
+        nodes[i].y = old_nodes[i].y;
+        nodes[i].vx = 0;
+        nodes[i].vy = 0;
+        // console.log("fixed node number", i);
+    }
+    for (var i = old_nodes.length; i < nodes.length; i++) {
+        var positionfixer = i%2 * 8
+        nodes[i].x = nodes[spawn_node.index].x + 4 - positionfixer
+        nodes[i].y = nodes[spawn_node.index].y + 4- positionfixer
+        nodes[i].vx = 0
+        nodes[i].vy = 0
+        // console.log("fixed node number", i);
+    }
+    //add code to fix the position of the newly added node(s)
+}
 
 var canvas = document.querySelector("canvas");
 canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+canvas.height = window.innerHeight/2;
 
 var context = canvas.getContext("2d");
 var width = canvas.width;
@@ -43,6 +92,7 @@ d3.select(canvas)
         .on("end", dragended));
 
 function ticked() {
+    //add code to multiply force based on the time from the last tick
     context.clearRect(0, 0, width, height);
     context.save();
     context.translate(width / 2, height / 2);
@@ -53,38 +103,123 @@ function ticked() {
     context.stroke();
 
     context.beginPath();
-    // console.log("nodes", nodes);
+    // //console.log("nodes", nodes);
     nodes.forEach(drawNode);
-    context.fill();
-    context.strokeStyle = "#fff";
-    context.stroke();
+    // context.strokeStyle = "#fff";
+    // context.stroke();
+
 
     context.restore();
+    // redosim();
+
+    // var currentTime = Date.now();
+    //if currentime%100 == 0
+    // if (currentTime%500 == 0){
+    //     //console.log(currentTime);
+    //     redosim();
+    // }
+    //restart sim
 }
 
-function addNode(existingNode) {
-    console.log("Trying to add");
-    console.log("existingNode", existingNode);
-    var newNode = {
-        "id": "new node",
-        // "vx": existingNode.vx,
-        // "vy": existingNode.vy,
-        "x": existingNode.x,
-        "y": existingNode.y,
-        "index": nodes.length
+async function addNode(existingNode) {
+    //console.log("Trying to add");
+    var numberstirng = Math.floor(Math.random() * 100000).toString()
+    console.log(numberstirng);
+    //console.log("existingNode", existingNode);
+    let sourcenum = Math.floor(Math.sqrt(nodes_orig.length - 1))
+    //console.log("newNode", newNode);
+    for (var i = 0; i < 10; i++) {
+        var newNode = {
+            "id": Math.floor(Math.random() * 100000).toString(),
+        }
+        nodes_orig.push(newNode)
+        newLink = {
+            source: existingNode.index,
+            target: nodes_orig.length - 1
+        };
+        links_orig.push(newLink);
+        old_nodes = JSON.parse(JSON.stringify(nodes));
+        nodes = JSON.parse(JSON.stringify(nodes_orig));
+        links = JSON.parse(JSON.stringify(links_orig));
+        redosim(old_nodes, existingNode);
+        await delay(50)
     }
-    console.log("newNode", newNode);
-    nodes.push(newNode)
-    console.log("nodes",nodes);
-    newLink = {
-        source: nodes[existingNode.index],
-        target: nodes[newNode.index],
-        index: links.length
-    }
-    console.log("links", links);
-    links.push(newLink);
-    simulation.restart();
+    // nodes_orig.push(newNode)
+    // newLink = {
+    //     source: sourcenum,
+    //     target: nodes_orig.length - 1
+    // };
+    // links_orig.push(newLink);
+    // nodes_orig.push(newNode)
+    // newLink = {
+    //     source: sourcenum,
+    //     target: nodes_orig.length - 1
+    // };
+    // links_orig.push(newLink);
+    // nodes_orig.push(newNode)
+    // newLink = {
+    //     source: sourcenum,
+    //     target: nodes_orig.length - 1
+    // };
+    // links_orig.push(newLink);
+    // nodes_orig.push(newNode)
+    // newLink = {
+    //     source: sourcenum,
+    //     target: nodes_orig.length - 1
+    // };
+    // links_orig.push(newLink);
+    //console.log("nodes", nodes);
+    // simulation.restart();
     // links
+    // //console.log("Waiting to redosim");
+
+    // nodes[nodes.length - 1].x = existingNode.x;
+    // nodes[nodes.length - 1].y = existingNode.y;
+    // nodes[nodes.length - 1].vx = existingNode.vx;
+    // nodes[nodes.length - 1].vy = existingNode.vy;
+
+    // redosim();
+    // redosim();
+    // redosim();
+    // redosim();
+    // redosim();
+    // redosim();
+    // await delay(10);
+    // //console.log(nodes[nodes.length - 1].x);
+    // //console.log(NaN);
+    // if (isNaN(nodes[nodes.length - 1].x)){
+    //     //console.log("still NaN");
+    // }
+    // //console.log("redoing sim");
+    // redosim();
+    // if (isNaN(nodes[nodes.length - 1].x)){
+    //     //console.log("still NaN");
+    // // }
+    // old_nodes = JSON.parse(JSON.stringify(nodes));
+    // nodes = JSON.parse(JSON.stringify(nodes_orig));
+    // links = JSON.parse(JSON.stringify(links_orig));
+    // redosim(old_nodes, existingNode);
+    // redosim();
+    // redosim();
+    // redosim();
+    // await delay(100);
+    // redosim();
+    // redosim();
+    // redosim();
+    // await delay(1000);
+    // redosim();
+    // redosim();
+
+
+    // newLink = {
+    //     source: nodes[existingNode.index],
+    //     target: nodes[newNode.index],
+    //     // index: links.length
+    // }
+}
+
+function delay(time) {
+    return new Promise(resolve => setTimeout(resolve, time));
 }
 
 function dragsubject() {
@@ -101,8 +236,8 @@ function dragstarted() {
 function dragged() {
     d3.event.subject.fx = d3.event.x;
     d3.event.subject.fy = d3.event.y;
-    // console.log("d3.event.subject.x", d3.event.subject.x);
-    console.log("d3.event.subject.y", d3.event.subject.y);
+    // //console.log("d3.event.subject.x", d3.event.subject.x);
+    //console.log("d3.event.subject.y", d3.event.subject.y);
 }
 
 function calculateDistance(x1, y1, x2, y2) {
@@ -111,37 +246,42 @@ function calculateDistance(x1, y1, x2, y2) {
 }
 
 function dragended() {
-    console.log("simulation", simulation);
-    console.log("simulation..nodes", simulation.nodes());
+    //console.log("simulation", simulation);
+    //console.log("simulation..nodes", simulation.nodes());
     clickEndTime = Date.now();
     if (!d3.event.active) simulation.alphaTarget(0);
     d3.event.subject.fx = null;
     d3.event.subject.fy = null;
-    console.log("d3.event.subject", d3.event.subject);
-    console.log("d3.event", d3.event);
-    // console.log("click ended");
+    //console.log("d3.event.subject", d3.event.subject);
+    //console.log("d3.event", d3.event);
+    // //console.log("click ended");
     var timeHeld = clickEndTime - clickStartTime;
-    // console.log("clickStartTime", clickStartTime);
-    // console.log("clickEndTime", clickEndTime);
-    console.log("timeHeld", timeHeld);
+    //console.log("clickStartTime", clickStartTime);
+    // //console.log("clickEndTime", clickEndTime);
+    //console.log("timeHeld", timeHeld);
     if (timeHeld < 150) {
-        console.log("This was probably a click");
+        //console.log("This was probably a click");
+        //Fix the MouseX, MouseY position
         mouseY = d3.event.sourceEvent.clientY - height / 2;
+        console.log("d3.event.subject.y", d3.event.subject.y);
         console.log("mouseY", mouseY);
         mouseX = d3.event.sourceEvent.clientX - width / 2;
+        console.log("d3.event.subject.x", d3.event.subject.x);
         console.log("mouseX", mouseX);
         var distance = calculateDistance(d3.event.subject.x, d3.event.subject.y, mouseX, mouseY)
         console.log("distance", distance);
-        if (distance < 5) {
-            console.log("probably clicked on node", d3.event.subject.id);
+        if (distance < 50) {
+            //console.log("probably clicked on node", d3.event.subject.id);
             addNode(d3.event.subject);
         }
         else {
-            console.log("Did not click close enough to warrant expansion for", d3.event.subject.id);
+            //console.log("Did not click close enough to warrant expansion for", d3.event.subject.id);
+            // redosim();
+            //console.log("links", links);
         }
     }
     else {
-        console.log("This was probably a drag");
+        //console.log("This was probably a drag");
     }
 }
 
@@ -151,6 +291,40 @@ function drawLink(d) {
 }
 
 function drawNode(d) {
-    context.moveTo(d.x + 3, d.y);
+    //use context.beginPath(); to clear previous colors
+    context.beginPath();
+    // context.moveTo(d.x + 3, d.y);
+    // context.strokeStyle = "#f00";
+    // context.stroke
+  //set strokeStyle here
     context.arc(d.x, d.y, 3, 0, 2 * Math.PI);
+    context.strokeStyle = "#" + stringToColorHex(d.id);
+    // context.strokeText(d.id, d.x+5, d.y+10)
+    // context.strokeRect(d.x,d.y,100,20)
+    context.fillStyle= "#" + stringToColorHex(d.id);
+    context.fill();
+    context.stroke();
+    context.closePath();
+  //use context.stroke() here
+}
+
+
+function stringToColorHex(str) {
+    // A simple hash function
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+        hash = hash & hash; // Convert to 32bit integer
+    }
+
+    // Convert the hash to an RGB hexadecimal value
+    const red = (hash >> 16) & 0xFF;
+    const green = (hash >> 8) & 0xFF;
+    const blue = hash & 0xFF;
+
+    // Convert RGB to hexadecimal format
+    const colorHex = ((red << 16) | (green << 8) | blue).toString(16);
+
+    // Ensure leading zeros are not removed
+    return colorHex.padStart(6, '0');
 }
