@@ -7,18 +7,25 @@ var clickEndTime = 0;
 //     return {
 //         index: i
 //     };
+// 1A2VHcohqFRAU4DijTx8aWMWmadeEwFRJT
+// 1A3WqJBaFGWM8UvvQVLnzrkB4Z51YA5UBk
 // });
-var nodes_orig = [{ "id": "starting point" }, { "id": "second point" }, { "id": "third point" }, {"id": "j"}]
+var nodes_orig = [
+    { "id": "1A1RWwZHpWd3x1q6ZX5gtrxhwAx5pbZGpb" },
+    { "id": "1A2VHcohqFRAU4DijTx8aWMWmadeEwFRJT" },
+    { "id": "1A3WqJBaFGWM8UvvQVLnzrkB4Z51YA5UBk" }
+]
 //console.log(nodes_orig);
 
 let nodes = JSON.parse(JSON.stringify(nodes_orig));
 
-var links_orig = d3.range(nodes.length - 1).map(function (i) {
-    return {
-        source: Math.floor(Math.sqrt(i)),
-        target: i + 1
-    };
-});
+var links_orig = []
+// d3.range(nodes.length - 1).map(function (i) {
+//     return {
+//         source: Math.floor(Math.sqrt(i)),
+//         target: i + 1
+//     };
+// });
 //console.log("links_orig", links_orig);
 let links = JSON.parse(JSON.stringify(links_orig));
 
@@ -64,9 +71,9 @@ function redosim(old_nodes, spawn_node) {
         // console.log("fixed node number", i);
     }
     for (var i = old_nodes.length; i < nodes.length; i++) {
-        var positionfixer = i%2 * 8
+        var positionfixer = i % 2 * 8
         nodes[i].x = nodes[spawn_node.index].x + 4 - positionfixer
-        nodes[i].y = nodes[spawn_node.index].y + 4- positionfixer
+        nodes[i].y = nodes[spawn_node.index].y + 4 - positionfixer
         nodes[i].vx = 0
         nodes[i].vy = 0
         // console.log("fixed node number", i);
@@ -76,12 +83,12 @@ function redosim(old_nodes, spawn_node) {
 
 var canvas = document.querySelector("canvas");
 canvas.width = window.innerWidth;
-canvas.height = window.innerHeight/2;
+canvas.height = window.innerHeight / 2;
 
 var context = canvas.getContext("2d");
 var width = canvas.width;
 var height = canvas.height;
-
+var lastUpdateTime = 0;
 
 d3.select(canvas)
     .call(d3.drag()
@@ -92,6 +99,7 @@ d3.select(canvas)
         .on("end", dragended));
 
 function ticked() {
+    // console.log("ticked")
     //add code to multiply force based on the time from the last tick
     context.clearRect(0, 0, width, height);
     context.save();
@@ -119,18 +127,26 @@ function ticked() {
     //     redosim();
     // }
     //restart sim
+    var tickTime = Date.now();
+    if (tickTime - lastUpdateTime > 33) {
+        console.log("Time to update");
+        lastUpdateTime = Date.now();
+        updateSvg(nodes, links);
+    }
 }
 
 async function addNode(existingNode) {
     //console.log("Trying to add");
+    var newNodeIDs = await expandTransactions(existingNode.id)
+    console.log("new ids", newNodeIDs);
     var numberstirng = Math.floor(Math.random() * 100000).toString()
     console.log(numberstirng);
     //console.log("existingNode", existingNode);
     let sourcenum = Math.floor(Math.sqrt(nodes_orig.length - 1))
     //console.log("newNode", newNode);
-    for (var i = 0; i < 10; i++) {
+    for (var i = 0; i < newNodeIDs.length; i++) {
         var newNode = {
-            "id": Math.floor(Math.random() * 100000).toString(),
+            "id": newNodeIDs[i].to,
         }
         nodes_orig.push(newNode)
         newLink = {
@@ -296,17 +312,18 @@ function drawNode(d) {
     // context.moveTo(d.x + 3, d.y);
     // context.strokeStyle = "#f00";
     // context.stroke
-  //set strokeStyle here
+    //set strokeStyle here
     context.arc(d.x, d.y, 3, 0, 2 * Math.PI);
     context.strokeStyle = "#" + stringToColorHex(d.id);
     // context.strokeText(d.id, d.x+5, d.y+10)
     // context.strokeRect(d.x,d.y,100,20)
-    context.fillStyle= "#" + stringToColorHex(d.id);
+    context.fillStyle = "#" + stringToColorHex(d.id);
     context.fill();
     context.stroke();
     context.closePath();
-  //use context.stroke() here
+    //use context.stroke() here
 }
+
 
 
 function stringToColorHex(str) {
@@ -328,3 +345,72 @@ function stringToColorHex(str) {
     // Ensure leading zeros are not removed
     return colorHex.padStart(6, '0');
 }
+
+
+function updateSvg(nodes, links) {
+    // console.log("nodes", nodes);
+    // console.log("links", links);
+    let svgelement = document.getElementById("copy-div")
+
+    for (let i = 0; i < nodes.length; i++) {
+        var myNode = document.getElementById(nodes[i].id);
+        if (myNode) {
+            // console.log("already exists");
+            myNode.setAttribute("cx", nodes[i].x + canvas.width / 2);
+            myNode.setAttribute("cy", nodes[i].y + canvas.height / 2);
+        }
+        else {
+            let circle = createCircle(nodes[i], 10)
+            svgelement.appendChild(circle)
+        }
+        //         canvas.width
+        // canvas.height;
+
+    }
+}
+
+function createCircle(node, radius) {
+    let circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    circle.setAttribute("cx", node.x + canvas.width / 2);
+    circle.setAttribute("cy", node.y + canvas.height / 2);
+    circle.setAttribute("r", radius);
+    circle.setAttribute("class", "node");
+    circle.id = node.id;
+
+    circle.setAttribute("fill", "#" + stringToColorHex(node.id)); // Change the fill color if needed
+    circle.setAttribute("onclick", "iclickedsvg('"+ JSON.stringify(node)+"')")
+    let tooltip = document.createElement('span');
+    tooltip.innerHTML = "Hello"
+    tooltip.classList.add("tooltip")
+    circle.appendChild(tooltip)
+
+    circle.setAttribute("title", node.id)
+    return circle;
+}
+
+function iclickedsvg(e) {
+    console.log("test")
+    console.log(e);
+    var node = JSON.parse(e)
+    console.log(node);
+    addNode(node);
+}
+
+async function expandTransactions(id) {
+    walletAddress = id;
+    console.log(walletAddress)
+    //get transactions from db
+    var tx = fetch('/get_transactions_from_address', {
+        method: "POST",
+        body: JSON.stringify({
+            "address": walletAddress
+        }),
+    })
+        .then(response => response.json())
+        .then(transactions => {
+            // console.log("transactions", transactions);
+            return transactions
+        })
+    // console.log("tx", tx);
+    return tx
+};
