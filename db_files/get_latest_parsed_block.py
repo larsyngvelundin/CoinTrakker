@@ -13,7 +13,11 @@ def main():
     # print(data[0])
     block_height = data.fetchone()[0]
     #get block time
-    block_time = rpc.get_block_time(block_height)
+    try:
+        block_time = rpc.get_block_time(block_height)
+    except ConnectionRefusedError:
+        logger.error("Failed to get blocktime, setting 0")
+        block_time = 0
 
     block_info = {'time': block_time, 'height': block_height}
 

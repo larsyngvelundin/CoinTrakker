@@ -51,14 +51,14 @@ def get_address_from_id(id):
 def get_balance_from(address, from_block=0, to_block=0):
     if (not to_block):
         logger.debug("Setting to_block to latest")
-        to_block = rpc.get_block_count()
+        to_block = get_latest_parsed_block()['height']
     return db_files.get_balance_from.main(address, from_block=from_block, to_block=to_block)
 
 #get_balance_to(from, from_block, to_block)
 def get_balance_to(address, from_block=0, to_block=0):
     if (not to_block):
         logger.debug("Setting to_block to latest")
-        to_block = rpc.get_block_count()
+        to_block = get_latest_parsed_block()['height']
     return db_files.get_balance_to.main(address, from_block=from_block, to_block=to_block)
 
 #getdbname
@@ -85,7 +85,7 @@ def get_latest_parsed_block():
 def get_transactions_from(address, from_block=0, to_block=0):
     if (not to_block):
         logger.debug("Setting to_block to latest")
-        to_block = rpc.get_block_count()
+        to_block = get_latest_parsed_block()['height']
     return db_files.get_transactions_from.main(address, from_block=from_block, to_block=to_block)
 
 #initialize
