@@ -7,6 +7,7 @@ import rpc
 
 def main(from_block, to_block):
     for i in range(from_block, to_block+1):
+        rpc.refresh_rpc_connection()
         block_hash = rpc.get_block_hash(i)
         if i: #If block height is > 0, aka not Genesis
             timing_data = {'start': time()}
