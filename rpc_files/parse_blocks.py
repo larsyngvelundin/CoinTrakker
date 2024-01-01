@@ -89,14 +89,13 @@ def main(from_block, to_block):
             timing_data['db_total']['percentage'] = timing_data['db_total']['elapsed'] / timing_data['txloop']['elapsed']
 
 
-            logger.info(timing_data)
             # Write out total times and time per transactions and vout
-            logger.info(f"            Total time: {timing_data['elapsed']:.3f}")
-            logger.info(f"Getting the block data: {timing_data['get_block']['elapsed']:.3f}    ({(timing_data['get_block']['percentage']*100):.2f}%)")
-            logger.info(f"    Looping the hashes: {timing_data['txloop']['elapsed']:.3f}    ({(timing_data['txloop']['percentage']*100):.2f}%)")
-            logger.info(f"  Parsing the block data: {timing_data['parse_total']['elapsed']:.3f}    ({(timing_data['parse_total']['percentage']*100):.2f}%)")
-            logger.info(f"   Saving the block data: {timing_data['db_total']['elapsed']:.3f}    ({(timing_data['db_total']['percentage']*100):.2f}%)")
-            logger.info(f"{timing_data['elapsed']:.3f}\n{timing_data['get_block']['elapsed']:.3f}\n{timing_data['parse_total']['elapsed']:.3f}\n{timing_data['db_total']['elapsed']:.3f}")
+            logger.debug(f"            Total time: {timing_data['elapsed']:.3f}")
+            logger.debug(f"Getting the block data: {timing_data['get_block']['elapsed']:.3f}    ({(timing_data['get_block']['percentage']*100):.2f}%)")
+            logger.debug(f"    Looping the hashes: {timing_data['txloop']['elapsed']:.3f}    ({(timing_data['txloop']['percentage']*100):.2f}%)")
+            logger.debug(f"  Parsing the block data: {timing_data['parse_total']['elapsed']:.3f}    ({(timing_data['parse_total']['percentage']*100):.2f}%)")
+            logger.debug(f"   Saving the block data: {timing_data['db_total']['elapsed']:.3f}    ({(timing_data['db_total']['percentage']*100):.2f}%)")
+            logger.debug(f"{timing_data['elapsed']:.3f}\n{timing_data['get_block']['elapsed']:.3f}\n{timing_data['parse_total']['elapsed']:.3f}\n{timing_data['db_total']['elapsed']:.3f}")
           
         else: #if Genesis
             
