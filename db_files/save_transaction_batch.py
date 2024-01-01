@@ -3,7 +3,7 @@ import sqlite3
 
 
 def main(parsed_transactions, block):
-    logger.info("Saving batch")
+    logger.debug("Saving batch")
     # con_addr = sqlite3.connect("local_db/addresses.db")
     # con_tran = sqlite3.connect("local_db/transactions_hashes.db")
     con_inco = sqlite3.connect("local_db/incoming.db")
