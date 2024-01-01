@@ -1,14 +1,17 @@
 from loguru import logger
+from time import time
 
 import convert
 import rpc
 
 def main(transaction_hash):
+    parsed = {}
+    parsed['timing'] = {}
+    parsed['timing']['start'] = time()
     logger.debug(f"Checking new transaction hash\n{transaction_hash}\n########################")
     raw_transaction = rpc.get_raw_transaction(transaction_hash)
     decoded_transaction = rpc.decode_raw_transaction(raw_transaction)
     logger.debug(f"Decoded: {decoded_transaction}")
-    parsed = {}
     parsed['transaction_hash'] = transaction_hash
     sender = rpc.get_sender_address(transaction_hash)
     parsed['from'] = sender
@@ -45,6 +48,8 @@ def main(transaction_hash):
     parsed['amount'] = total_amount
     parsed['fee'] = convert.to_sats(rpc.get_fee(transaction_hash))
     logger.debug(parsed)
+    parsed['timing']['end'] = time()
+    parsed['timing']['vouts'] = len(decoded_transaction['vout'])
     return parsed
 
     

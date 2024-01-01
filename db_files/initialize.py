@@ -7,8 +7,8 @@ def main():
     #check if local_db folder exists
     if not os.path.isdir("local_db"):
         os.mkdir("local_db")
-        os.mkdir("local_db/incoming")
-        os.mkdir("local_db/outgoing")
+        # os.mkdir("local_db/incoming")
+        # os.mkdir("local_db/outgoing")
     #create wallets.db/addresses.db
     con = sqlite3.connect("local_db/addresses.db")
     with con:
@@ -27,5 +27,6 @@ def main():
             transaction_hash TEXT UNIQUE
         );
         """)
+    
     pass
 
