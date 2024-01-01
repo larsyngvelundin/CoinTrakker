@@ -32,7 +32,11 @@ rpc_url = config('rpc_url')
 
 logger.debug("Imports done!")
 
+
 rpc_connection = AuthServiceProxy(f"http://{rpc_username}:{rpc_password}@{rpc_url}:{rpc_port}", timeout=120)
+def refresh_rpc_connection():
+    global rpc_connection
+    rpc_connection = AuthServiceProxy(f"http://{rpc_username}:{rpc_password}@{rpc_url}:{rpc_port}", timeout=120)
 
 #########################
 ##DEFAULT RPC ENDPOINTS##
