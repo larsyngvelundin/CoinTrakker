@@ -46,7 +46,7 @@ def main(from_block, to_block):
                 logger.debug(f"Checking new transaction hash\n{txhash}")
                 #measure time parsing block and include in transaction_data
                 transaction_data = rpc.parse_transaction_data(txhash)
-                logger.info(f"transaction_data: {transaction_data}")
+                # logger.info(f"transaction_data: {transaction_data}")
                 timing_data['parse_total']['elapsed'] += transaction_data['timing']['end'] - transaction_data['timing']['start']
 
 

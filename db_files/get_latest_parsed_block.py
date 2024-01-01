@@ -7,7 +7,7 @@ import rpc
 def main():
     logger.debug(".")
     db_file = db.get_db_name("Mining reward")
-    con = sqlite3.connect(f"local_db/outgoing/{db_file}.db")
+    con = sqlite3.connect(f"local_db/outgoing.db")
     sql = 'SELECT MAX(block) from "Mining reward"'
     with con:
         data = con.execute(sql)
