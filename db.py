@@ -18,6 +18,7 @@ import db_files.print_all
 import db_files.save_address
 import db_files.save_hash
 import db_files.save_transaction
+import db_files.save_transaction_batch
 
 import rpc
 
@@ -107,5 +108,8 @@ def save_address(address):
 # savetransaction
 def save_transaction(amount, to_address, from_address, block, transaction_hash):
     return db_files.save_transaction.main(amount, to_address, from_address, block, transaction_hash)
+
+def save_transaction_batch(parsed_transactions, block):
+    return db_files.save_transaction_batch.main(parsed_transactions, block)
 
 initialize()
