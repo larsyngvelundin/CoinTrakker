@@ -5,10 +5,11 @@ import sqlite3
 import db
 
 def main(address, from_block=0, to_block=100):
+    logger.debug("Currently Defunct")
     # if(isinstance(address, int)):
     #     address = db.get_address_from_id(address)
     logger.debug(f"checking from {address}")
-    sql = f"SELECT * FROM '{address}' WHERE block BETWEEN {from_block} and {to_block}"
+    sql = f"SELECT * FROM '{address}' WHERE from EQUALS '{address}' AND block BETWEEN {from_block} and {to_block}"
     # db_name = db.get_db_name(address)
     con = sqlite3.connect(f"local_db/outgoing.db")
     with con:
