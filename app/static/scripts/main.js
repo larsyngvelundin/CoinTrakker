@@ -1,15 +1,18 @@
 // set the dimensions and margins of the graph
-var margin = { top: 10, right: 10, bottom: 10, left: 10 },
-    width = 500 - margin.left - margin.right,
-    height = 300 - margin.top - margin.bottom;
+var margin = { top: 50, right: 10, bottom: 10, left: 10 };
+var width = 500 - margin.left - margin.right;
+width = window.innerWidth- margin.left - margin.right;
+var height = 300 - margin.top - margin.bottom;
+height = window.innerHeight - margin.top - margin.bottom;
 
 // format variables
-var formatNumber = d3.format(",.0f"), // zero decimal places
-    format = function (d) { return formatNumber(d); },
-    color = d3.scaleOrdinal(d3.schemeCategory10);
+var formatNumber = d3.format(",.0f"); // zero decimal places
+var format = function (d) { return formatNumber(d); };
+var color = d3.scaleOrdinal(d3.schemeCategory10);
 
+// function createDiagram(){}
 // append the svg object to the body of the page
-var svg = d3.select("body").append("svg")
+var svg = d3.select("svg")//.append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
@@ -99,7 +102,11 @@ function initializeGraph() {
         .attr("x", function (d) { return d.x1 + 6; })
         .attr("text-anchor", "start");
 }
-initializeGraph();
+// initializeGraph();
+
+function getTransactions(address){
+    
+}
 
 function drawGraph() {
     graph = sankey(test_data);
