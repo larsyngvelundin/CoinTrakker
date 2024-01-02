@@ -4,6 +4,7 @@ from loguru import logger
 import db
 
 def main(amount, to_address, from_address, block, transaction_hash):
+    logger.error("Currently defunct")
     db.create_db(to_address)
     # if(not db.db_exists(to_address)):
     #     logger.debug(f"DB for {to_address} does not exist")
