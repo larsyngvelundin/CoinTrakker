@@ -1,15 +1,41 @@
+var testingAddress = "1A2VHcohqFRAU4DijTx8aWMWmadeEwFRJT"
+var loadingIndicator = document.getElementById("loading-indicator")
+
+// var StartingTransactions = [];
+var StartingTransactions = []
+fetch('/get_transactions_from_address', {
+    method: "POST",
+    body: JSON.stringify({
+        "address": testingAddress
+    }),
+})
+    .then(response => response.json())
+    .then(transactions => {
+
+        StartingTransactions = transactions;
+        loadingIndicator.classList.add("hidden")
+        initializeGraph();
+    });
+// for (var i = 0; i < transactions.length; i++) {
+//     console.log(transactions[i]);
+// }});
+// console.log(StartingTransactions);
+
 // set the dimensions and margins of the graph
-var margin = { top: 10, right: 10, bottom: 10, left: 10 },
-    width = 500 - margin.left - margin.right,
-    height = 300 - margin.top - margin.bottom;
+var margin = { top: 50, right: 10, bottom: 10, left: 10 };
+var width = 500 - margin.left - margin.right;
+width = window.innerWidth - margin.left - margin.right;
+var height = 300 - margin.top - margin.bottom;
+height = window.innerHeight - margin.top - margin.bottom;
 
 // format variables
-var formatNumber = d3.format(",.0f"), // zero decimal places
-    format = function (d) { return formatNumber(d); },
-    color = d3.scaleOrdinal(d3.schemeCategory10);
+// var formatNumber = d3.format(",.18f"); // zero decimal places
+// var format = function (d) { return formatNumber(d); };
+var color = d3.scaleOrdinal(d3.schemeCategory10);
 
+// function createDiagram(){}
 // append the svg object to the body of the page
-var svg = d3.select("body").append("svg")
+var svg = d3.select("svg")//.append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
@@ -41,11 +67,40 @@ var test_data = {
         { "source": 3, "target": 4, "value": 4 }
     ]
 }
-// load the data
-// d3.json("sankey.json").then(function (sankeydata) {
+
+var start_data = {
+    "nodes": [],
+    "links": []
+}
+function getNodeID(name) {
+    var node = start_data.nodes.find(function (node) {
+        return node.name === name;
+    });
+    if (node) {
+        return node.node
+    }
+    else { return null }
+}
+
+
 function initializeGraph() {
+
+    start_data['nodes'].push({ "node": start_data['nodes'].length, "name": StartingTransactions[0].from })
+    for (var i = 0; i < StartingTransactions.length; i++) {
+        console.log(StartingTransactions[i]);
+        start_data['nodes'].push({ "node": start_data['nodes'].length, "name": StartingTransactions[i].to })
+    }
+    console.log(start_data['nodes']);
+    for (var i = 0; i < StartingTransactions.length; i++) {
+        start_data['links'].push({
+            "source": getNodeID(StartingTransactions[i].from),
+            "target": getNodeID(StartingTransactions[i].to),
+            "value": StartingTransactions[i].amount
+        })
+    }
+    console.log(start_data);
     // console.log(sankeydata);
-    graph = sankey(test_data);
+    graph = sankey(start_data);
     console.log(graph);
     // add in the links
     var link = svg.append("g").attr("id", "links")
@@ -60,7 +115,8 @@ function initializeGraph() {
     link.append("title")
         .text(function (d) {
             return d.source.name + " → " +
-                d.target.name + "\n" + format(d.value);
+                d.target.name + "\n" + d.value;
+            // d.target.name + "\n" + format(d.value);
         });
 
     // add in the nodes
@@ -85,7 +141,8 @@ function initializeGraph() {
         })
         .append("title")
         .text(function (d) {
-            return d.name + "\n" + format(d.value);
+            // return d.name + "\n" + format(d.value);
+            return d.name + "\n" + d.value;
         });
 
     // add in the title for the nodes
@@ -99,10 +156,12 @@ function initializeGraph() {
         .attr("x", function (d) { return d.x1 + 6; })
         .attr("text-anchor", "start");
 }
-initializeGraph();
+// initializeGraph();
+
+
 
 function drawGraph() {
-    graph = sankey(test_data);
+    graph = sankey(start_data);
     console.log("graph", graph);
     var link = svg.select("#links").selectAll(".link")
         .data(graph.links)
@@ -151,7 +210,8 @@ function drawGraph() {
         })
         .append("title")
         .text(function (d) {
-            return d.name + "\n" + format(d.value);
+            // return d.name + "\n" + format(d.value);
+            return d.name + "\n" + d.value;
         });
 
     // add in the title for the nodes
@@ -170,10 +230,48 @@ function nodeClicked(e) {
     console.log("nodeClicked");
     console.log(e);
     console.log(e.srcElement.__data__.name);
-    newNode = { "node": 5, "name": "node5" }
-    test_data.nodes.push(newNode)
-    newLink = { "source": 4, "target": 5, "value": 4 }
-    test_data.links.push(newLink)
-    drawGraph()
+    var address = e.srcElement.__data__.name;
+    newTransactions = getTransactions(address)
+    // newNode = { "node": 5, "name": "node5" }
+    // test_data.nodes.push(newNode)
+    // newLink = { "source": 4, "target": 5, "value": 4 }
+    // test_data.links.push(newLink)
+    // drawGraph()
 
+}
+
+async function getTransactions(address) {
+    loadingIndicator.classList.remove("hidden")
+    // var transactionList = []
+    fetch('/get_transactions_from_address', {
+        method: "POST",
+        body: JSON.stringify({
+            "address": address
+        }),
+    })
+        .then(response => response.json())
+        .then(transactions => {
+
+            addTransactions(transactions)
+            loadingIndicator.classList.add("hidden")
+
+        });
+}
+
+function addTransactions(newTransactions) {
+    for (var i = 0; i < newTransactions.length; i++) {
+        console.log(newTransactions[i]);
+        if (!getNodeID(newTransactions[i].to)) {
+            start_data['nodes'].push({ "node": start_data['nodes'].length, "name": newTransactions[i].to })
+        }
+    }
+    console.log(start_data['nodes']);
+    for (var i = 0; i < newTransactions.length; i++) {
+        start_data['links'].push({
+            "source": getNodeID(newTransactions[i].from),
+            "target": getNodeID(newTransactions[i].to),
+            "value": newTransactions[i].amount
+        })
+    }
+    drawGraph();
 }
