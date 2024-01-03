@@ -1,3 +1,17 @@
+testingAddress = "1A2VHcohqFRAU4DijTx8aWMWmadeEwFRJT"
+fetch('/get_transactions_from_address', {
+    method: "POST",
+    body: JSON.stringify({
+        "address": testingAddress
+    }),
+})
+    .then(response => response.json())
+    .then(transactions => {
+        for (var i = 0; i < transactions.length; i++) {
+            console.log(transactions[i]);
+        }});
+
+
 // set the dimensions and margins of the graph
 var margin = { top: 50, right: 10, bottom: 10, left: 10 };
 var width = 500 - margin.left - margin.right;
@@ -105,8 +119,9 @@ function initializeGraph() {
 // initializeGraph();
 
 function getTransactions(address){
-    
+
 }
+
 
 function drawGraph() {
     graph = sankey(test_data);
