@@ -3,19 +3,23 @@ var loadingIndicator = document.getElementById("loading-indicator")
 
 // var StartingTransactions = [];
 var StartingTransactions = []
-fetch('/get_transactions_from_address', {
-    method: "POST",
-    body: JSON.stringify({
-        "address": testingAddress
-    }),
-})
-    .then(response => response.json())
-    .then(transactions => {
+function getStartingTransactions() {
+    loadingIndicator.classList.remove("hidden")
+    fetch('/get_transactions_from_address', {
+        method: "POST",
+        body: JSON.stringify({
+            "address": testingAddress
+        }),
+    })
+        .then(response => response.json())
+        .then(transactions => {
 
-        StartingTransactions = transactions;
-        loadingIndicator.classList.add("hidden")
-        initializeGraph();
-    });
+            StartingTransactions = transactions;
+            loadingIndicator.classList.add("hidden")
+            initializeGraph();
+        });
+}
+getStartingTransactions();
 // for (var i = 0; i < transactions.length; i++) {
 //     console.log(transactions[i]);
 // }});
@@ -87,10 +91,10 @@ function initializeGraph() {
 
     start_data['nodes'].push({ "node": start_data['nodes'].length, "name": StartingTransactions[0].from })
     for (var i = 0; i < StartingTransactions.length; i++) {
-        console.log(StartingTransactions[i]);
+        // console.log(StartingTransactions[i]);
         start_data['nodes'].push({ "node": start_data['nodes'].length, "name": StartingTransactions[i].to })
     }
-    console.log(start_data['nodes']);
+    // console.log(start_data['nodes']);
     for (var i = 0; i < StartingTransactions.length; i++) {
         start_data['links'].push({
             "source": getNodeID(StartingTransactions[i].from),
@@ -98,10 +102,10 @@ function initializeGraph() {
             "value": StartingTransactions[i].amount
         })
     }
-    console.log(start_data);
+    // console.log(start_data);
     // console.log(sankeydata);
     graph = sankey(start_data);
-    console.log(graph);
+    // console.log(graph);
     // add in the links
     var link = svg.append("g").attr("id", "links")
         .selectAll(".link")
@@ -162,7 +166,7 @@ function initializeGraph() {
 
 function drawGraph() {
     graph = sankey(start_data);
-    console.log("graph", graph);
+    // console.log("graph", graph);
     var link = svg.select("#links").selectAll(".link")
         .data(graph.links)
     link.attr("d", d3.sankeyLinkHorizontal());
@@ -274,4 +278,39 @@ function addTransactions(newTransactions) {
         })
     }
     drawGraph();
+}
+
+
+document.addEventListener('DOMContentLoaded', (e) => {
+    console.log("Ran after DOM was loaded");
+    const blockInfoDiv = document.getElementById("last-block-info")
+    const fetchPromise = fetch('/get_last_block');
+    fetchPromise.then(response => {
+        return response.json();
+    }).then(BlockInfo => {
+        console.log("BlockInfo.time", BlockInfo.time);
+        var blockDate = new Date(BlockInfo.time * 1000)
+        console.log("blockDate",blockDate);
+        var blockDateStr = blockDate.toDateString()
+        console.log("blockDateStr", blockDateStr);
+        blockInfoDiv.innerHTML = `${blockDateStr} - ${BlockInfo.height}`
+        console.log(BlockInfo);
+    });
+});
+
+async function getLastBlock() {
+    console.log("in getLastBlock");
+    var lastBlockInfo = await fetch('/get_last_block')
+        .then(function (a) {
+            return a.json(); // call the json method on the response to get JSON
+        })
+        .then(function (json) {
+            console.log("301", json);
+        })
+    // .then(response => response.json())
+    // .then(block_data => {
+    //     return block_data;
+    // });
+    console.log("lastBlockInfo", lastBlockInfo);
+    console.log("done?");
 }
