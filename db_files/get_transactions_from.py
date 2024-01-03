@@ -1,7 +1,7 @@
 from loguru import logger
 import sqlite3
 
-# import convert
+import convert
 import db
 
 def main(address, from_block=0, to_block=1000000):
@@ -27,7 +27,7 @@ def main(address, from_block=0, to_block=1000000):
         # transaction_dict['block'] = transaction[2]
         # transaction_dict['hash'] = transaction[3]
 
-        transaction_dict['amount'] = transaction[0]
+        transaction_dict['amount'] = convert.to_btc(transaction[0])
         transaction_dict['from'] = address
         transaction_dict['to'] = transaction[2]
         transaction_dict['block'] = transaction[3]
