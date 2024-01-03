@@ -35,18 +35,22 @@ def get_transactions_from_address():
     logger.debug(transactions)
     return jsonify(transactions)
 
-@app.route('/get_new', methods=['POST'])
-def get_new():
+@app.route('/get_last_block')
+def get_last_block():
     # print("get new")
     # print(dir(request))
     # print(json.loads(request.data))
     # print(request.data)
-    test = json.loads(request.data)
+    # test = json.loads(request.data)
     # data = request.json
     # test = json.dumps(data)
-    print(test['data'])
-    new_data = {'content':'["Ford", "BMW", "Fiat"]'}
-    return jsonify(new_data)
+    # print(test['data'])
+    # new_data = {'content':'["Ford", "BMW", "Fiat"]'}
+    logger.info(f"getting last block")
+    last_block = db.get_latest_parsed_block()
+    logger.info(f"last_block : {last_block}")
+    # return jsonify({'test': 0})
+    return jsonify(last_block)
 
 @app.route('/')
 def index():
