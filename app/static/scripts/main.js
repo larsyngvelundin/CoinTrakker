@@ -229,24 +229,20 @@ function drawGraph() {
         .attr("x", function (d) { return d.x1 + 6; })
         .attr("text-anchor", "start");
 }
-// });
+
 function nodeClicked(e) {
     console.log("nodeClicked");
-    console.log(e);
-    console.log(e.srcElement.__data__.name);
-    var address = e.srcElement.__data__.name;
-    newTransactions = getTransactions(address)
-    // newNode = { "node": 5, "name": "node5" }
-    // test_data.nodes.push(newNode)
-    // newLink = { "source": 4, "target": 5, "value": 4 }
-    // test_data.links.push(newLink)
-    // drawGraph()
-
+    if (!e.srcElement.classList.contains("clicked")){
+        e.srcElement.classList.add("clicked")
+        console.log(e);
+        console.log(e.srcElement.__data__.name);
+        var address = e.srcElement.__data__.name;
+        getTransactions(address)
+    }
 }
 
 async function getTransactions(address) {
     loadingIndicator.classList.remove("hidden")
-    // var transactionList = []
     fetch('/get_transactions_from_address', {
         method: "POST",
         body: JSON.stringify({
@@ -290,7 +286,7 @@ document.addEventListener('DOMContentLoaded', (e) => {
     }).then(BlockInfo => {
         console.log("BlockInfo.time", BlockInfo.time);
         var blockDate = new Date(BlockInfo.time * 1000)
-        console.log("blockDate",blockDate);
+        console.log("blockDate", blockDate);
         var blockDateStr = blockDate.toDateString()
         console.log("blockDateStr", blockDateStr);
         blockInfoDiv.innerHTML = `${blockDateStr} - ${BlockInfo.height}`
