@@ -26,8 +26,16 @@ body {
 .node rect,
 .node text,
 .link {
-    transition: all 1s ease-out;
+    transition: all 3s ease-out;
+    transform-origin: right;
 }
+
+.node text{
+    /* transform-origin: left; */
+    /* transform:rotate(90deg); */
+    /* translate: -30px -100px; */
+}
+
 
 .top-bar{
     position: absolute;
@@ -45,6 +53,10 @@ body {
 
 #last-block-info{
     left: 10px;
+}
+
+.initial{
+    width:0px;
 }
 
 .hidden{

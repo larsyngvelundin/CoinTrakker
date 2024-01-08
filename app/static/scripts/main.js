@@ -171,12 +171,20 @@ function drawGraph() {
         .data(graph.links)
     link.attr("d", d3.sankeyLinkHorizontal());
 
+    // // Original
+    // var newLink = svg.select("#links").selectAll(".link")
+    //     .data(graph.links)
+    //     .enter().append("path")
+    //     .attr("class", "link initial")
+    //     .attr("d", d3.sankeyLinkHorizontal())
+    //     .attr("stroke-width", function (d) { return d.width; });
     var newLink = svg.select("#links").selectAll(".link")
         .data(graph.links)
         .enter().append("path")
-        .attr("class", "link")
+        .attr("class", "link initial")
         .attr("d", d3.sankeyLinkHorizontal())
         .attr("stroke-width", function (d) { return d.width; });
+
 
     var node = svg.select("#nodes")
         .selectAll(".node")
@@ -199,13 +207,14 @@ function drawGraph() {
         .selectAll(".node")
         .data(graph.nodes)
         .enter().append("g")
-        .attr("class", "node")
+        .attr("class", "node initial")
         .on("click", nodeClicked);
+
     newNode.append("rect")
-        .attr("x", function (d) { return d.x0; })
+        .attr("x", function (d) { return d.x0 + sankey.nodeWidth(); })
         .attr("y", function (d) { return d.y0; })
         .attr("height", function (d) { return d.y1 - d.y0; })
-        .attr("width", sankey.nodeWidth())
+        .attr("width", 0)
         .style("fill", function (d) {
             return d.color = color(d.name.replace(/ .*/, ""));
         })
@@ -218,7 +227,7 @@ function drawGraph() {
             return d.name + "\n" + d.value;
         });
 
-    // add in the title for the nodes
+    //     // add in the title for the nodes
     newNode.append("text")
         .attr("x", function (d) { return d.x0 - 6; })
         .attr("y", function (d) { return (d.y1 + d.y0) / 2; })
@@ -232,13 +241,26 @@ function drawGraph() {
 
 function nodeClicked(e) {
     console.log("nodeClicked");
-    if (!e.srcElement.classList.contains("clicked")){
+    if (!e.srcElement.classList.contains("clicked")) {
         e.srcElement.classList.add("clicked")
         console.log(e);
         console.log(e.srcElement.__data__.name);
         var address = e.srcElement.__data__.name;
         getTransactions(address)
     }
+}
+
+function updateInitial() {
+    console.log("updateInitial");
+    initialNodes = svg.select('#nodes')
+        .selectAll('.initial')
+        .select('rect')
+        .attr("x", function (d) { return d.x0; })
+
+    // initialElements = document.getElementsByClassName("initial");
+    // for (var i = 0; i < initialElements.length; i++) {
+    //     initialElements[i].classList.remove("initial")
+    // }
 }
 
 async function getTransactions(address) {
@@ -258,7 +280,7 @@ async function getTransactions(address) {
         });
 }
 
-function addTransactions(newTransactions) {
+async function addTransactions(newTransactions) {
     for (var i = 0; i < newTransactions.length; i++) {
         console.log(newTransactions[i]);
         if (!getNodeID(newTransactions[i].to)) {
@@ -274,39 +296,47 @@ function addTransactions(newTransactions) {
         })
     }
     drawGraph();
+    await delay(10);
+    drawGraph();
+    // updateInitial();
 }
 
 
-document.addEventListener('DOMContentLoaded', (e) => {
-    console.log("Ran after DOM was loaded");
-    const blockInfoDiv = document.getElementById("last-block-info")
-    const fetchPromise = fetch('/get_last_block');
-    fetchPromise.then(response => {
-        return response.json();
-    }).then(BlockInfo => {
-        console.log("BlockInfo.time", BlockInfo.time);
-        var blockDate = new Date(BlockInfo.time * 1000)
-        console.log("blockDate", blockDate);
-        var blockDateStr = blockDate.toDateString()
-        console.log("blockDateStr", blockDateStr);
-        blockInfoDiv.innerHTML = `${blockDateStr} - ${BlockInfo.height}`
-        console.log(BlockInfo);
-    });
-});
+// document.addEventListener('DOMContentLoaded', (e) => {
+//     console.log("Ran after DOM was loaded");
+//     const blockInfoDiv = document.getElementById("last-block-info")
+//     const fetchPromise = fetch('/get_last_block');
+//     fetchPromise.then(response => {
+//         return response.json();
+//     }).then(BlockInfo => {
+//         console.log("BlockInfo.time", BlockInfo.time);
+//         var blockDate = new Date(BlockInfo.time * 1000)
+//         console.log("blockDate", blockDate);
+//         var blockDateStr = blockDate.toDateString()
+//         console.log("blockDateStr", blockDateStr);
+//         blockInfoDiv.innerHTML = `${blockDateStr} - ${BlockInfo.height}`
+//         console.log(BlockInfo);
+//     });
+// });
 
 async function getLastBlock() {
     console.log("in getLastBlock");
-    var lastBlockInfo = await fetch('/get_last_block')
-        .then(function (a) {
-            return a.json(); // call the json method on the response to get JSON
-        })
-        .then(function (json) {
-            console.log("301", json);
-        })
-    // .then(response => response.json())
-    // .then(block_data => {
-    //     return block_data;
-    // });
-    console.log("lastBlockInfo", lastBlockInfo);
-    console.log("done?");
+    // var lastBlockInfo = await fetch('/get_last_block')
+    //     .then(function (a) {
+    //         return a.json(); // call the json method on the response to get JSON
+    //     })
+    //     .then(function (json) {
+    //         console.log("301", json);
+    //     })
+    // // .then(response => response.json())
+    // // .then(block_data => {
+    // //     return block_data;
+    // // });
+    // console.log("lastBlockInfo", lastBlockInfo);
+    // console.log("done?");
 }
+
+
+function delay(time) {
+    return new Promise(resolve => setTimeout(resolve, time));
+  }
