@@ -155,15 +155,15 @@ function initializeGraph() {
         });
 
     // add in the title for the nodes
-    node.append("text")
-        .attr("x", function (d) { return d.x0 - 6; })
-        .attr("y", function (d) { return (d.y1 + d.y0) / 2; })
-        .attr("dy", "0.35em")
-        .attr("text-anchor", "end")
-        .text(function (d) { return d.name; })
-        .filter(function (d) { return d.x0 < width / 2; })
-        .attr("x", function (d) { return d.x1 + 6; })
-        .attr("text-anchor", "start");
+    // node.append("text")
+    //     .attr("x", function (d) { return d.x0 - 6; })
+    //     .attr("y", function (d) { return (d.y1 + d.y0) / 2; })
+    //     .attr("dy", "0.35em")
+    //     .attr("text-anchor", "end")
+    //     .text(function (d) { return d.name; })
+    //     .filter(function (d) { return d.x0 < width / 2; })
+    //     .attr("x", function (d) { return d.x1 + 6; })
+    //     .attr("text-anchor", "start");
 }
 
 function drawGraph() {
@@ -173,11 +173,38 @@ function drawGraph() {
     var link = svg.select("#links").selectAll(".link")
         .data(graph.links)
     link.attr("d", d3.sankeyLinkHorizontal());
+    link.attr("class", "link")
     link.attr("stroke-width", function (d) {
-        console.log("d", d);
+        // console.log("d", d);
         return d.width;
     });
 
+    function initialLink(sankeyLinkHorizontal, d){
+        defaultPath = sankeyLinkHorizontal(d);
+        console.log("sankeyLink value", defaultPath);
+        var pathCommands = defaultPath.split(/(?=[LMC])/);
+        console.log("pathCommands", pathCommands);
+        var cX = parseInt(pathCommands[1].split(",")[4]);
+        var mX = parseInt(pathCommands[0].split(",")[0].substring(1));
+        var offsetX = cX - mX;
+        console.log("add this much to all x", cX - mX);
+        var newMX = mX + offsetX
+        var newM = "M" + (newMX) + "," + pathCommands[0].split(",")[1];
+        console.log("newM", newM);
+        var newC = "C";
+        newC += (parseInt(pathCommands[1].split(",")[0].substring(1)) + offsetX) + ",";
+        newC += pathCommands[1].split(",")[1] + ",";
+        newC += (parseInt(pathCommands[1].split(",")[2]) + offsetX) + ",";
+        newC += pathCommands[1].split(",")[3] + ",";
+        newC += (cX + offsetX) + ",";
+        newC += pathCommands[1].split(",")[5];
+        console.log("newC", newC);
+        pathCommands[0] = newM;
+        pathCommands[1] = newC;
+        console.log("adjusted pathCommands", pathCommands);
+        return pathCommands.join(' ');
+        // return sankeyLinkHorizontal
+    }
     // // Original
     // var newLink = svg.select("#links").selectAll(".link")
     //     .data(graph.links)
@@ -189,9 +216,15 @@ function drawGraph() {
         .data(graph.links)
         .enter().append("path")
         .attr("class", "link initial")
-        .attr("d", d3.sankeyLinkHorizontal())
+        .attr("d", function(d) {return initialLink(d3.sankeyLinkHorizontal(), d)})
         .attr("stroke-width", function (d) { return d.width; });
-
+        
+    // var newLinks = svg.select("#links").selectAll(".initial")
+        // .node().getBBox()
+        // .attr("test", function(d){
+        //     console.log(d);
+        // })
+        // console.log(newLinks.d);
 
     var node = svg.select("#nodes")
         .selectAll(".node")
@@ -204,11 +237,11 @@ function drawGraph() {
         .attr("height", function (d) { return d.y1 - d.y0; })
         .attr("width", sankey.nodeWidth())
 
-    node.select("text")
-        .attr("x", function (d) { return d.x0 - 6; })
-        .attr("y", function (d) { return (d.y1 + d.y0) / 2; })
-        .filter(function (d) { return d.x0 < width / 2; })
-        .attr("x", function (d) { return d.x1 + 6; })
+    // node.select("text")
+    //     .attr("x", function (d) { return d.x0 - 6; })
+    //     .attr("y", function (d) { return (d.y1 + d.y0) / 2; })
+    //     .filter(function (d) { return d.x0 < width / 2; })
+    //     .attr("x", function (d) { return d.x1 + 6; })
 
     var newNode = svg.select("#nodes")
         .selectAll(".node")
@@ -235,15 +268,15 @@ function drawGraph() {
         });
 
     //     // add in the title for the nodes
-    newNode.append("text")
-        .attr("x", function (d) { return d.x0 - 6; })
-        .attr("y", function (d) { return (d.y1 + d.y0) / 2; })
-        .attr("dy", "0.35em")
-        .attr("text-anchor", "end")
-        .text(function (d) { return d.name; })
-        .filter(function (d) { return d.x0 < width / 2; })
-        .attr("x", function (d) { return d.x1 + 6; })
-        .attr("text-anchor", "start");
+    // newNode.append("text")
+    //     .attr("x", function (d) { return d.x0 - 6; })
+    //     .attr("y", function (d) { return (d.y1 + d.y0) / 2; })
+    //     .attr("dy", "0.35em")
+    //     .attr("text-anchor", "end")
+    //     .text(function (d) { return d.name; })
+    //     .filter(function (d) { return d.x0 < width / 2; })
+    //     .attr("x", function (d) { return d.x1 + 6; })
+    //     .attr("text-anchor", "start");
 }
 
 function nodeClicked(e) {
@@ -305,8 +338,8 @@ async function addTransactions(newTransactions) {
     drawGraph();
     await delay(10);
     drawGraph();
-    await delay(10);
-    drawGraph();
+    // await delay(10);
+    // drawGraph();
     // updateInitial();
 }
 
