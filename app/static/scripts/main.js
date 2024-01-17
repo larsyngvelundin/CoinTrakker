@@ -1,5 +1,6 @@
-var testingAddress = "1A2VHcohqFRAU4DijTx8aWMWmadeEwFRJT"
-// var testingAddress = "1XPTgDRhN8RFnzniWCddobD9iKZatrvH4"
+// var testingAddress = "1A2VHcohqFRAU4DijTx8aWMWmadeEwFRJT";
+// var testingAddress = "1XPTgDRhN8RFnzniWCddobD9iKZatrvH4";
+var testingAddress = "123f1x9LXV6ea9XDm3FopQ884A32C28SUb";
 var loadingIndicator = document.getElementById("loading-indicator")
 
 // var StartingTransactions = [];
@@ -139,7 +140,7 @@ function initializeGraph() {
         .attr("height", function (d) { return d.y1 - d.y0; })
         .attr("width", sankey.nodeWidth())
         .style("fill", function (d) {
-            return d.color = color(d.name.replace(/ .*/, ""));
+            return d.color = stringToColorHex(d.name);
         })
         .style("stroke", function (d) {
             return d3.rgb(d.color).darker(2);
@@ -217,7 +218,7 @@ function drawGraph() {
         .attr("height", function (d) { return d.y1 - d.y0; })
         .attr("width", 0)
         .style("fill", function (d) {
-            return d.color = color(d.name.replace(/ .*/, ""));
+            return d.color = stringToColorHex(d.name);
         })
         .style("stroke", function (d) {
             return d3.rgb(d.color).darker(2);
@@ -354,5 +355,5 @@ function delay(time) {
     const green = (hash >> 8) & 0xFF;
     const blue = hash & 0xFF;
     const colorHex = ((red << 16) | (green << 8) | blue).toString(16);
-    return colorHex.padStart(6, '0');
+    return "#" + colorHex.padStart(6, '0');
 }
