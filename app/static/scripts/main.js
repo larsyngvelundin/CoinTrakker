@@ -305,19 +305,20 @@ async function addTransactions(newTransactions) {
 
 document.addEventListener('DOMContentLoaded', (e) => {
     console.log("Ran after DOM was loaded");
-    const blockInfoDiv = document.getElementById("last-block-info")
-    const fetchPromise = fetch('/get_last_block');
-    fetchPromise.then(response => {
-        return response.json();
-    }).then(BlockInfo => {
-        console.log("BlockInfo.time", BlockInfo.time);
-        var blockDate = new Date(BlockInfo.time * 1000)
-        console.log("blockDate", blockDate);
-        var blockDateStr = blockDate.toDateString()
-        console.log("blockDateStr", blockDateStr);
-        blockInfoDiv.innerHTML = `${blockDateStr} - ${BlockInfo.height}`
-        console.log(BlockInfo);
-    });
+    //Commented until 500 error is fixed
+    // const blockInfoDiv = document.getElementById("last-block-info")
+    // const fetchPromise = fetch('/get_last_block');
+    // fetchPromise.then(response => {
+    //     return response.json();
+    // }).then(BlockInfo => {
+    //     console.log("BlockInfo.time", BlockInfo.time);
+    //     var blockDate = new Date(BlockInfo.time * 1000)
+    //     console.log("blockDate", blockDate);
+    //     var blockDateStr = blockDate.toDateString()
+    //     console.log("blockDateStr", blockDateStr);
+    //     blockInfoDiv.innerHTML = `${blockDateStr} - ${BlockInfo.height}`
+    //     console.log(BlockInfo);
+    // });
 });
 
 async function getLastBlock() {
