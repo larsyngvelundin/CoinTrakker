@@ -87,8 +87,7 @@ function initializeGraph() {
         .attr("class", "link")
         .attr("d", d3.sankeyLinkHorizontal())
         .attr("stroke-width", function (d) {
-            console.log("d", d);
-            return d.width;
+            return normalizeLinkWidth(d.width); 
         })
         .on("contextmenu", linkMenu);
 
@@ -109,7 +108,7 @@ function initializeGraph() {
     node.append("rect")
         .attr("x", function (d) { return d.x0; })
         .attr("y", function (d) { return d.y0; })
-        .attr("height", function (d) { return d.y1 - d.y0; })
+        .attr("height", function (d) { return normalizeLinkWidth(d.y1 - d.y0); })
         .attr("width", sankey.nodeWidth())
         .style("fill", function (d) {
             return d.color = stringToColorHex(d.name);
@@ -162,7 +161,7 @@ function drawGraph() {
         .enter().append("path")
         .attr("class", "link initial")
         .attr("d", function (d) { return initialLink(d3.sankeyLinkHorizontal(), d) })
-        .attr("stroke-width", function (d) { return d.width; })
+        .attr("stroke-width", function (d) { return normalizeLinkWidth(d.width); })
         .append("title")
         .text(function (d) {
             return d.source.name + " → " +
@@ -176,7 +175,7 @@ function drawGraph() {
     node.select("rect")
         .attr("x", function (d) { return d.x0; })
         .attr("y", function (d) { return d.y0; })
-        .attr("height", function (d) { return d.y1 - d.y0; })
+        .attr("height", function (d) { return normalizeLinkWidth(d.y1 - d.y0); })
         .attr("width", sankey.nodeWidth())
 
     var newNode = svg.select("#nodes")
@@ -254,7 +253,7 @@ async function addTransactions(newTransactions) {
             "source": getNodeID(newTransactions[i].from),
             "target": getNodeID(newTransactions[i].to),
             "value": newTransactions[i].amount,
-            "hash": StartingTransactions[i].hash
+            "hash": newTransactions[i].hash
         })
     }
     drawGraph();
@@ -321,9 +320,9 @@ function stringToColorHex(str) {
     return "#" + colorHex.padStart(6, '0');
 }
 
-function normalizeValues(value) {
-    if (value > 10) { return 10 }
-    if (value < 1) { return 1 }
+function normalizeLinkWidth(value) {
+    // if (value > 10) { return 10 }
+    if (value < 0.1) { return 0.1 }
     return value;
 }
 
@@ -378,10 +377,14 @@ function nodeMenu(e) {
     contextMenu.innerHTML = `
         <h3>${eAddress}</h3>
         <button id="start-new-diagram" data-address=${eAddress}>Start new diagram using this address</button>
+        <button id="get-incoming-transactions" data-address=${eAddress}>Start new diagram using this address</button>
         <a href="https://bitaps.com/${eAddress}" target="_blank" class="button">Open on Bitaps</a>
     `;
 
     var startNewDiagramButton = document.getElementById("start-new-diagram");
+    startNewDiagramButton.addEventListener("click", startNewDiagram)
+
+    var startNewDiagramButton = document.getElementById("get-incoming-transactions");
     startNewDiagramButton.addEventListener("click", startNewDiagram)
 
 
