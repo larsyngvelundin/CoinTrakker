@@ -112,6 +112,7 @@ function initializeGraph() {
         .attr("y", function (d) { return d.y0; })
         .attr("height", function (d) { return normalizeLinkWidth(d.y1 - d.y0); })
         .attr("width", sankey.nodeWidth())
+        .attr("from", function(d) {return d.from})
         .style("fill", function (d) {
             return d.color = stringToColorHex(d.name);
         })
@@ -185,6 +186,7 @@ function drawGraph() {
         .data(graph.nodes)
         .enter().append("g")
         .attr("class", "node initial")
+        .attr("data-from", function(d) {return d.from})
         .on("click", nodeClicked)
         .on("contextmenu", nodeMenu);
 
@@ -211,9 +213,18 @@ function nodeClicked(e) {
     if (!e.srcElement.classList.contains("clicked")) {
         e.srcElement.classList.add("clicked")
         console.log(e);
+        console.log(e.srcElement);
         console.log(e.srcElement.__data__.name);
         var address = e.srcElement.__data__.name;
-        getTransactions(address)
+        if(address.includes(" other ")){
+            // address = e.src;
+            var nodeID = e.srcElement.__data__.node;
+            console.log(start_data['nodes'][nodeID]['targetLinks'][0]['source']['name']);
+            console.log(start_data['nodes']);
+            console.log(e.srcElement.__data__.node);
+            address = start_data['nodes'][nodeID]['targetLinks'][0]['source']['name'];
+        }
+        getTransactions(address, cached=true)
     }
 }
 
@@ -225,13 +236,15 @@ function updateInitial() {
         .attr("x", function (d) { return d.x0; })
 }
 
-async function getTransactions(address) {
+async function getTransactions(address, cached = false) {
     loadingIndicator.classList.remove("hidden")
+    var remainder_id = 0;
+    if (cached){remainder_id = 1}
     fetch('/get_transactions_from_address', {
         method: "POST",
         body: JSON.stringify({
             "address": address,
-            "remainder_id": 0
+            "remainder_id": remainder_id
         }),
     })
         .then(response => response.json())
