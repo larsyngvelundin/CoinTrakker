@@ -70,11 +70,13 @@ function initializeGraph() {
     for (var i = 0; i < StartingTransactions.length; i++) {
         start_data['nodes'].push({ "node": start_data['nodes'].length, "name": StartingTransactions[i].to })
     }
+    console.log("starting", StartingTransactions);
     for (var i = 0; i < StartingTransactions.length; i++) {
         start_data['links'].push({
             "source": getNodeID(StartingTransactions[i].from),
             "target": getNodeID(StartingTransactions[i].to),
-            "value": StartingTransactions[i].amount
+            "value": StartingTransactions[i].amount,
+            "hash": StartingTransactions[i].hash
         })
     }
     graph = sankey(start_data);
@@ -334,13 +336,25 @@ function linkMenu(e) {
     e.preventDefault();
     console.log("link Right-Clicked");
     console.log(e);
+    var eHash = e.srcElement.__data__.hash;
     var contextMenu = document.getElementById("context-menu");
     contextMenu.classList.remove("hidden");
     contextMenu.innerHTML = `
-        <h3>${eAddress}</h3>
-        <button id="start-new-diagram" data-address=${eAddress}>Start new diagram using this address</button>
-        <a href="https://bitaps.com/${eAddress}" target="_blank" class="button">Open on Bitaps</a>
+        <h3>${eHash}</h3>
+        <a href="https://bitaps.com/${eHash}" target="_blank" class="button">Open on Bitaps</a>
     `;
+    var posX = e.pageX;
+    var posY = e.pageY;
+    if (posX + contextMenu.offsetWidth > window.innerWidth) {
+        posX -= contextMenu.offsetWidth;
+    }
+
+    if (posY + contextMenu.offsetHeight > window.innerHeight) {
+        posY -= contextMenu.offsetHeight;
+    }
+    
+    contextMenu.style.left = posX + "px"
+    contextMenu.style.top = posY + "px"
 }
 
 function nodeMenu(e) {
