@@ -51,6 +51,10 @@ body {
     right: 10px;
 }
 
+#force-re-draw{
+    left: 170px;
+}
+
 #last-block-info{
     left: 10px;
 }
