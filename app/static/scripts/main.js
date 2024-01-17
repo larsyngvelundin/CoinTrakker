@@ -14,13 +14,13 @@ function getStartingTransactions(address) {
     })
         .then(response => response.json())
         .then(transactions => {
-
+            console.log(transactions);
             StartingTransactions = transactions;
             loadingIndicator.classList.add("hidden")
             initializeGraph();
         });
 }
-getStartingTransactions(testingAddress);
+// getStartingTransactions(testingAddress);
 
 var margin = { top: 50, right: 10, bottom: 10, left: 10 };
 var width = 500 - margin.left - margin.right;
@@ -289,25 +289,28 @@ document.addEventListener('DOMContentLoaded', (e) => {
             document.getElementById("context-menu").classList.add("hidden");
         }
     });
+    const searchButton = document.getElementById("search-button");
+
+    searchButton.addEventListener("click", handleSearchClick)
     // const redrawButton = document.getElementById("force-re-draw");
     // redrawButton.addEventListener("click", function (e) {
     //     console.log("Attempting Re-Draw")
     //     drawGraph();
     // })
     //Commented until 500 error is fixed
-    // const blockInfoDiv = document.getElementById("last-block-info")
-    // const fetchPromise = fetch('/get_last_block');
-    // fetchPromise.then(response => {
-    //     return response.json();
-    // }).then(BlockInfo => {
-    //     console.log("BlockInfo.time", BlockInfo.time);
-    //     var blockDate = new Date(BlockInfo.time * 1000)
-    //     console.log("blockDate", blockDate);
-    //     var blockDateStr = blockDate.toDateString()
-    //     console.log("blockDateStr", blockDateStr);
-    //     blockInfoDiv.innerHTML = `${blockDateStr} - ${BlockInfo.height}`
-    //     console.log(BlockInfo);
-    // });
+    const blockInfoDiv = document.getElementById("last-block-info")
+    const fetchPromise = fetch('/get_last_block');
+    fetchPromise.then(response => {
+        return response.json();
+    }).then(BlockInfo => {
+        console.log("BlockInfo.time", BlockInfo.time);
+        var blockDate = new Date(BlockInfo.time * 1000)
+        console.log("blockDate", blockDate);
+        var blockDateStr = blockDate.toDateString()
+        console.log("blockDateStr", blockDateStr);
+        blockInfoDiv.innerHTML = `Data up until ${blockDateStr} - ${BlockInfo.height}`
+        console.log(BlockInfo);
+    });
 });
 
 async function getLastBlock() {
@@ -345,6 +348,12 @@ function normalizeLinkWidth(value) {
     return value;
 }
 
+
+function handleSearchClick(){
+    const searchField = document.getElementById("search-field")
+    searchField.dataset.address = searchField.value;
+    getStartingTransactions(searchField.value)
+}
 
 function startNewDiagram(e) {
     console.log("Starting new diagram");

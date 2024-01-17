@@ -2,42 +2,30 @@
     <head>
       <meta charset="UTF-8">
       <!-- <script src="https://unpkg.com/htmx.org@1.6.1"></script> -->
-      <link rel="stylesheet" href="{{ url_for('static',filename='/styles/normalize.css') }}">
-      <link rel="stylesheet" href="{{ url_for('static',filename='/styles/style.css') }}">
-      <script src="{{ url_for('static',filename='/scripts/d3/d3-sankey.js') }}"></script>
-      <script src="{{ url_for('static',filename='/scripts/d3/d3.v7.js') }}"></script>
-      <script src="{{ url_for('static',filename='/scripts/main.js') }}" defer></script>
+      <link rel="stylesheet" href="{{ url_for('static',filename='styles/normalize.css') }}">
+      <link rel="stylesheet" href="{{ url_for('static',filename='styles/style.css') }}">
+      <script src="{{ url_for('static',filename='scripts/d3/d3-sankey.js') }}"></script>
+      <script src="{{ url_for('static',filename='scripts/d3/d3.v7.js') }}"></script>
+      <script src="{{ url_for('static',filename='scripts/main.js') }}" defer></script>
       <!-- <link rel="stylesheet" href="app/styles/style.css"> -->
     </head>
 
 
     <body>
-        <div id="loading-indicator" class="hidden top-bar">Loading data</div>
+        <div id="loading-indicator" class="hidden top-bar">
+            Loading data
+            <img src="/static/img/loading.gif" height="20px">
+        </div>
         <!-- <div id="force-re-draw" class="top-bar">Re-Draw</div> -->
-        <div id="last-block-info" class="top-bar">Placeholder</div>
+        <div id="last-block-info" class="top-bar">
+            Fetching block info
+            <img src="/static/img/loading.gif" height="20px">
+        </div>
+        <input id="search-field" type="text" class="top-bar" value="123f1x9LXV6ea9XDm3FopQ884A32C28SUb" size=35/>
+        <button id="search-button" class="top-bar">Open address</button>
         <svg></svg>
         <div id="context-menu" class="hidden"></div>
-        <!-- <div class="container">
-            <div class="row">
-                <div class="col-lg-8  offset-lg-2"> -->
-                    <!-- <button onclick=myFunction()>Add via flask</button>
-                    <button id="addnumtest">Add via JS</button>
-                    <button id="addnumtestmult">Add multiple via JS</button>
-                    <button id="addnumtestdyn">Add dynamic via JS</button> -->
-                    <!-- <div class="flex-cont" id="testingdiv">
-                        <div id="1ExF15z6YxFrNZHcnH2sYohbKBh47b1aow" class="wallet-div" data-checked-to="0">1ExF....1aow</div>
-                        <div id="1A1RWwZHpWd3x1q6ZX5gtrxhwAx5pbZGpb" class="wallet-div" data-checked-to="0">1A1R....ZGpb</div>
-                        <div id="1A2VHcohqFRAU4DijTx8aWMWmadeEwFRJT" class="wallet-div" data-checked-to="0">1A2V....FRJT</div>
-                    </div> -->
-                <!-- </div>
-            </div>
-        </div> -->
-        <!-- <script>
-            async function myFunction() {
-  const a = await fetch("/set_test")
-}   
-        console.log("in index")
-        </script> -->
+
     </body>
 
 </html>

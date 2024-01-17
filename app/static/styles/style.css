@@ -47,6 +47,15 @@ body {
     padding: 0 3px;
 }
 
+#search-field{
+    left: 470px;
+    background-color: #ddd;
+}
+#search-button{
+    left: 990px;
+}
+
+
 #loading-indicator{
     /* right: 10px; */
     position: absolute;
