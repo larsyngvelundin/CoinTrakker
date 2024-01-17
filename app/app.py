@@ -14,6 +14,15 @@ def get_transactions_from_address():
     logger.debug(transactions)
     return jsonify(transactions)
 
+@app.route('/get_transactions_to_address', methods=['POST'])
+def get_transactions_to_address():
+    #Receives JSON with "address" (Upgrade for block information later)
+    request_data = json.loads(request.data)
+    logger.info(f"request_data : {request_data}")
+    transactions = db.get_transactions_to(request_data['address'])
+    logger.debug(transactions)
+    return jsonify(transactions)
+
 @app.route('/get_last_block')
 def get_last_block():
     logger.info(f"getting last block")
