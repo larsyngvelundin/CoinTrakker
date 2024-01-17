@@ -115,7 +115,10 @@ function initializeGraph() {
         .enter().append("path")
         .attr("class", "link")
         .attr("d", d3.sankeyLinkHorizontal())
-        .attr("stroke-width", function (d) { return d.width; });
+        .attr("stroke-width", function (d) {
+            console.log("d", d);
+            return d.width;
+        });
 
     // add the link titles
     link.append("title")
@@ -162,16 +165,18 @@ function initializeGraph() {
         .attr("x", function (d) { return d.x1 + 6; })
         .attr("text-anchor", "start");
 }
-// initializeGraph();
-
-
 
 function drawGraph() {
+    console.log("Drawing graph");
     graph = sankey(start_data);
     // console.log("graph", graph);
     var link = svg.select("#links").selectAll(".link")
         .data(graph.links)
     link.attr("d", d3.sankeyLinkHorizontal());
+    link.attr("stroke-width", function (d) {
+        console.log("d", d);
+        return d.width;
+    });
 
     // // Original
     // var newLink = svg.select("#links").selectAll(".link")
@@ -300,12 +305,19 @@ async function addTransactions(newTransactions) {
     drawGraph();
     await delay(10);
     drawGraph();
+    await delay(10);
+    drawGraph();
     // updateInitial();
 }
 
 
 document.addEventListener('DOMContentLoaded', (e) => {
     console.log("Ran after DOM was loaded");
+    const redrawButton = document.getElementById("force-re-draw");
+    redrawButton.addEventListener("click", function(e){
+        console.log("Attempting Re-Draw")
+        drawGraph();
+    })
     //Commented until 500 error is fixed
     // const blockInfoDiv = document.getElementById("last-block-info")
     // const fetchPromise = fetch('/get_last_block');
@@ -356,4 +368,10 @@ function delay(time) {
     const blue = hash & 0xFF;
     const colorHex = ((red << 16) | (green << 8) | blue).toString(16);
     return "#" + colorHex.padStart(6, '0');
+}
+
+function normalizeValues(value){
+    if (value > 10){return 10}
+    if (value < 1){return 1}
+    return value;
 }
