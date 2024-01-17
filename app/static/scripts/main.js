@@ -240,6 +240,25 @@ async function getTransactions(address) {
         });
 }
 
+async function getTransactionsIncoming(e) {
+    console.log(e);
+    var address = e.srcElement.dataset.address
+    loadingIndicator.classList.remove("hidden")
+    fetch('/get_transactions_to_address', {
+        method: "POST",
+        body: JSON.stringify({
+            "address": address
+        }),
+    })
+        .then(response => response.json())
+        .then(transactions => {
+
+            addTransactions(transactions)
+            loadingIndicator.classList.add("hidden")
+
+        });
+}
+
 async function addTransactions(newTransactions) {
     for (var i = 0; i < newTransactions.length; i++) {
         console.log(newTransactions[i]);
@@ -377,7 +396,7 @@ function nodeMenu(e) {
     contextMenu.innerHTML = `
         <h3>${eAddress}</h3>
         <button id="start-new-diagram" data-address=${eAddress}>Start new diagram using this address</button>
-        <button id="get-incoming-transactions" data-address=${eAddress}>Start new diagram using this address</button>
+        <button id="get-incoming-transactions" data-address=${eAddress}>Fetch incoming transactions</button>
         <a href="https://bitaps.com/${eAddress}" target="_blank" class="button">Open on Bitaps</a>
     `;
 
@@ -385,7 +404,7 @@ function nodeMenu(e) {
     startNewDiagramButton.addEventListener("click", startNewDiagram)
 
     var startNewDiagramButton = document.getElementById("get-incoming-transactions");
-    startNewDiagramButton.addEventListener("click", startNewDiagram)
+    startNewDiagramButton.addEventListener("click", getTransactionsIncoming)
 
 
     var posX = parseInt(e.srcElement.attributes.x.value) + margin.left;
