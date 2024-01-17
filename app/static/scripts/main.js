@@ -150,10 +150,11 @@ function drawGraph() {
     var link = svg.select("#links").selectAll(".link")
         .data(graph.links)
     link.attr("d", d3.sankeyLinkHorizontal());
-    link.attr("class", "link")
+    link.attr("class", "link");
     link.attr("stroke-width", function (d) {
         return d.width;
     });
+    link.on("contextmenu", linkMenu);
 
 
     var newLink = svg.select("#links").selectAll(".link")
@@ -252,7 +253,8 @@ async function addTransactions(newTransactions) {
         start_data['links'].push({
             "source": getNodeID(newTransactions[i].from),
             "target": getNodeID(newTransactions[i].to),
-            "value": newTransactions[i].amount
+            "value": newTransactions[i].amount,
+            "hash": StartingTransactions[i].hash
         })
     }
     drawGraph();
@@ -358,7 +360,7 @@ function linkMenu(e) {
     if (posY + contextMenu.offsetHeight > window.innerHeight) {
         posY -= contextMenu.offsetHeight;
     }
-    
+
     contextMenu.style.left = posX + "px"
     contextMenu.style.top = posY + "px"
 }
