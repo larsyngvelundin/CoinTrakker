@@ -1,5 +1,6 @@
 // var testingAddress = "1A2VHcohqFRAU4DijTx8aWMWmadeEwFRJT";
 // var testingAddress = "1XPTgDRhN8RFnzniWCddobD9iKZatrvH4";
+// var testingAddress = "19RRBvhAvLToDL2kX4J7rVQSBKKp2etVcj";
 var testingAddress = "123f1x9LXV6ea9XDm3FopQ884A32C28SUb";
 var loadingIndicator = document.getElementById("loading-indicator")
 
@@ -9,7 +10,8 @@ function getStartingTransactions(address) {
     fetch('/get_transactions_from_address', {
         method: "POST",
         body: JSON.stringify({
-            "address": address
+            "address": address,
+            "remainder_id": 0
         }),
     })
         .then(response => response.json())
@@ -228,7 +230,8 @@ async function getTransactions(address) {
     fetch('/get_transactions_from_address', {
         method: "POST",
         body: JSON.stringify({
-            "address": address
+            "address": address,
+            "remainder_id": 0
         }),
     })
         .then(response => response.json())
