@@ -335,12 +335,18 @@ function startNewDiagram(e) {
 function linkMenu(e) {
     e.preventDefault();
     console.log("link Right-Clicked");
-    console.log(e);
+    console.log(e.srcElement.__data__);
     var eHash = e.srcElement.__data__.hash;
+    var eFrom = e.srcElement.__data__.source.name;
+    var eTo = e.srcElement.__data__.target.name;
+    var eAmount = e.srcElement.__data__.value;
     var contextMenu = document.getElementById("context-menu");
     contextMenu.classList.remove("hidden");
     contextMenu.innerHTML = `
         <h3>${eHash}</h3>
+        <p>Amount: ${eAmount}</p>
+        <p>From: ${eFrom}</p>
+        <p>To: ${eTo}</p>
         <a href="https://bitaps.com/${eHash}" target="_blank" class="button">Open on Bitaps</a>
     `;
     var posX = e.pageX;
