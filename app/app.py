@@ -12,10 +12,10 @@ def get_transactions_from_address():
     #Receives JSON with "address" (Upgrade for block information later)
     request_data = json.loads(request.data)
     logger.info(f"request_data : {request_data}")
+    remainder_id = request_data['remainder_id']
     from_address = request_data['address']
-    if (from_address in cached_transactions):
+    if (from_address in cached_transactions and remainder_id != 0):
         print("already cached")
-        remainder_id = request_data['remainder_id']
         # print(cached_transactions[from_address])
         transactions = cached_transactions[from_address][:5]
         logger.debug(f"transactions returned: {transactions}")
