@@ -188,7 +188,7 @@ function drawGraph() {
         .on("contextmenu", nodeMenu);
 
     newNode.append("rect")
-        .attr("x", function (d) { return d.x0 + sankey.nodeWidth(); })
+        .attr("x", function (d) { return d.x0 + 800; })
         .attr("y", function (d) { return d.y0; })
         .attr("height", function (d) { return d.y1 - d.y0; })
         .attr("width", 0)
