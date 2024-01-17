@@ -1,4 +1,5 @@
 var testingAddress = "1A2VHcohqFRAU4DijTx8aWMWmadeEwFRJT"
+// var testingAddress = "1XPTgDRhN8RFnzniWCddobD9iKZatrvH4"
 var loadingIndicator = document.getElementById("loading-indicator")
 
 // var StartingTransactions = [];
@@ -302,41 +303,55 @@ async function addTransactions(newTransactions) {
 }
 
 
-// document.addEventListener('DOMContentLoaded', (e) => {
-//     console.log("Ran after DOM was loaded");
-//     const blockInfoDiv = document.getElementById("last-block-info")
-//     const fetchPromise = fetch('/get_last_block');
-//     fetchPromise.then(response => {
-//         return response.json();
-//     }).then(BlockInfo => {
-//         console.log("BlockInfo.time", BlockInfo.time);
-//         var blockDate = new Date(BlockInfo.time * 1000)
-//         console.log("blockDate", blockDate);
-//         var blockDateStr = blockDate.toDateString()
-//         console.log("blockDateStr", blockDateStr);
-//         blockInfoDiv.innerHTML = `${blockDateStr} - ${BlockInfo.height}`
-//         console.log(BlockInfo);
-//     });
-// });
+document.addEventListener('DOMContentLoaded', (e) => {
+    console.log("Ran after DOM was loaded");
+    const blockInfoDiv = document.getElementById("last-block-info")
+    const fetchPromise = fetch('/get_last_block');
+    fetchPromise.then(response => {
+        return response.json();
+    }).then(BlockInfo => {
+        console.log("BlockInfo.time", BlockInfo.time);
+        var blockDate = new Date(BlockInfo.time * 1000)
+        console.log("blockDate", blockDate);
+        var blockDateStr = blockDate.toDateString()
+        console.log("blockDateStr", blockDateStr);
+        blockInfoDiv.innerHTML = `${blockDateStr} - ${BlockInfo.height}`
+        console.log(BlockInfo);
+    });
+});
 
 async function getLastBlock() {
     console.log("in getLastBlock");
-    // var lastBlockInfo = await fetch('/get_last_block')
-    //     .then(function (a) {
-    //         return a.json(); // call the json method on the response to get JSON
-    //     })
-    //     .then(function (json) {
-    //         console.log("301", json);
-    //     })
-    // // .then(response => response.json())
-    // // .then(block_data => {
-    // //     return block_data;
-    // // });
-    // console.log("lastBlockInfo", lastBlockInfo);
-    // console.log("done?");
+    var lastBlockInfo = await fetch('/get_last_block')
+        .then(function (a) {
+            return a.json(); // call the json method on the response to get JSON
+        })
+        .then(function (json) {
+            console.log("301", json);
+        })
+    // .then(response => response.json())
+    // .then(block_data => {
+    //     return block_data;
+    // });
+    console.log("lastBlockInfo", lastBlockInfo);
+    console.log("done?");
 }
 
 
 function delay(time) {
     return new Promise(resolve => setTimeout(resolve, time));
   }
+
+
+  function stringToColorHex(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+        hash = hash & hash;
+    }
+    const red = (hash >> 16) & 0xFF;
+    const green = (hash >> 8) & 0xFF;
+    const blue = hash & 0xFF;
+    const colorHex = ((red << 16) | (green << 8) | blue).toString(16);
+    return colorHex.padStart(6, '0');
+}
